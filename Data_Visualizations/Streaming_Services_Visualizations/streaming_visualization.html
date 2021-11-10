@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> INFO 3300 - Project 1</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <style>
+      .gridlines line {
+        stroke: #bbb;
+      }
+
+      .gridlines .domain {
+        stroke: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #svgs {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #title {
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+      }
+
+      text {
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+      }
+
+      #v1 {
+        margin-bottom: 40px;
+        margin-top: 10px;
+      }
+
+      #v2 {
+        margin-bottom: 40px;
+        margin-top: 10px;
+      }
+
+      #v3 {
+        margin-top: 10px;
+      }
+
+      .cap_heading {
+        padding-bottom: -10px;
+        margin-bottom: -10px;
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+      }
+
+      .caption {
+        font-size: 12px;
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        margin-right: 40%
+      }
+
+      h1 {
+        margin-bottom: -10px;
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <h1>Deriving Insights into Streaming-Service Entertainment</h1>
+    <div id= "svgs">
+      <div id= "v1">
+        <h5 class= "cap_heading">Graph 1: Visualizing Movie Genres on Streaming Services Across their Production Decade</h5>
+        <p class= "caption">We would like to see how the composition of movie genres on Netflix, Hulu,
+          Prime Video, and Disney+ changes across the movies’ production years. By comparing the percentage of the total 50s movies, for example, that are Sci Fi/Fantasy,
+          to the 60s, we can understand the trends in movie genres across time.</p>
+
+        <div id='title'></div>
+        <svg height= 650 width= 800 id="genrevstime" >
+        <!-- Populating dynamically -->
+        </svg>
+      </div>
+
+      <div id= "v2">
+        <h5 class= "cap_heading">Graph 2: Comparing Each Movies’ IMDb and Rotten Tomatoes Scores</h5>
+        <p class= "caption">Is there a correlation between IMDb Scores and Rotten Tomatoes
+          Scores? Is one platform a tougher critic than the other? And do more “successful”
+          or higher-scoring movies have a larger streaming platform presence? These are all
+          questions we might be able to answer by representing movie ratings and platform
+          presence on the below scatterplot.</p>
+        <svg id="plot1" height=520 width=500>
+        <!-- Populating dynamically -->
+        </svg>
+      </div>
+
+      <div id= 'v3'>
+        <h5 class= "cap_heading">Graph 3: Representing the Breakdown of TV Shows vs. Movies on Netflix across Time</h5>
+        <p class= "caption">Now, we would like to focus on the most popular streaming platform, Netflix. How much do movies
+          really matter on Netflix? We would hope to understand what proportion of Netflix’s offerings are composed of movies versus
+          television shows, and how that has changed over time since Netflix’s inception.</p>
+        <p id="trends">
+        <h3></h3>
+        <svg id="barChart" height=500 width=600>
+        <!-- Populating dynamically -->
+        </svg>
+      </div>
+
+    </div>
+
+    <script>
+      function textMargin(comparisonValue, marginList) {
+        if (comparisonValue < 10) {
+          return marginList[0];
+        } else if (comparisonValue < 100) {
+          return marginList[1];
+        } else if (comparisonValue < 1000) {
+          return marginList[2];
+        } else {
+          return marginList[3];
+        }
+      }
+
+      let svgBar = d3.select("svg#barChart");
+      const widthBar = svgBar.attr("width");
+      const heightBar = svgBar.attr("height");
+      const marginsBar = { "top": 10, "right": 10, "bottom": 50, "left": 50 };
+      const chartWidthBar = widthBar - marginsBar.left - marginsBar.right;
+      const chartHeightBar = heightBar - marginsBar.top - marginsBar.bottom;
+
+      // Chart Legend
+      svgBar.append("text").text("Netflix Releases (2008-2020)")
+        .attr("x", 310)
+        .attr("y", 250)
+        .style("font-size", "15px");
+      svgBar.append("line")
+        .attr("x1", 310)
+        .attr("x2", 340)
+        .attr("y1", 275)
+        .attr("y2", 275)
+        .style("stroke", "black")
+        .style("stroke-width", 30);
+      svgBar.append("text").text("Released TV Shows")
+        .attr("x", 350)
+        .attr("y", 280)
+        .style("font-size", "15px");
+      svgBar.append("line")
+        .attr("x1", 310)
+        .attr("x2", 340)
+        .attr("y1", 320)
+        .attr("y2", 320)
+        .style("stroke", "crimson")
+        .style("stroke-width", 30);
+      svgBar.append("text").text("Released Movies")
+        .attr("x", 350)
+        .attr("y", 325)
+        .style("font-size", "15px");
+
+
+      d3.csv("./netflix_titles.csv", d3.autoType)
+        .then((data) => {
+          // Clean the Data
+          data = data.filter(d => {
+            return d['date_added'] != null && d['date_added'] != "";
+          });
+          data.forEach(d => {
+            d['date_added'] = Number(d['date_added'].substring(d['date_added'].indexOf(",") + 2));
+            d['title'] = String(d['title']);
+            d['type'] = String(d['type']);
+          });
+          data = data.filter(d => {
+            return d['title'] != null && d['title'] != "";
+          });
+          data = data.filter(d => {
+            return d['type'] === "TV Show" || d['type'] === "Movie";
+          });
+          data = data.filter(d => {
+            return d['date_added'] < 2021;
+          });
+
+          //  Scales and Extents
+          const yearAddedExtent = d3.extent(data, d => d['date_added']);
+          var yearAddedScale = d3.scaleLinear().domain(yearAddedExtent).range([chartHeightBar, marginsBar.top]);
+
+          // Create New Data List
+          yearToReleaseCountData = []
+          for (let releaseYear = yearAddedExtent[0]; releaseYear <= yearAddedExtent[1]; releaseYear++) {
+            yearCountPair = { 'year_added': releaseYear, 'release_count': 0, "released_movie_count": 0, "released_tv_count": 0 };
+            yearToReleaseCountData.push(yearCountPair);
+          };
+          data.forEach(d => {
+            var release_year = d['date_added'];
+            var type = d['type'];
+            yearToReleaseCountData.forEach(d_dict => {
+              if (d_dict['year_added'] === release_year) {
+                d_dict['release_count'] += 1;
+                if (d['type'] === "Movie") {
+                  d_dict['released_movie_count'] += 1;
+                }
+              }
+            });
+          });
+
+          const releaseCountExtent = d3.extent(yearToReleaseCountData, d => d['release_count']);
+          var releaseCountScale = d3.scaleLog().domain(releaseCountExtent).range([marginsBar.left * 2, chartWidthBar]);
+          console.log(releaseCountScale(25))
+          console.log(releaseCountScale(13))
+          console.log(releaseCountScale(3))
+
+          yearToReleaseCountData.forEach((d, i) => {
+            releasedTVCount = d['release_count'] - d['released_movie_count'];
+            moviePercentage = d['released_movie_count'] / d['release_count']
+            tvPerecentage = releasedTVCount / d['release_count']
+            barLength = releaseCountScale(d['release_count']) - marginsBar.left
+            xRedPortion = marginsBar.left + (barLength * moviePercentage)
+
+            svgBar.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "15px")
+              .attr("x", marginsBar.left / 2)
+              .attr('y', yearAddedScale(d['year_added']) + 5)
+              .text(d['year_added']);
+
+            if (d['released_movie_count'] > 0) {
+              svgBar.append("line")
+                .attr("x1", marginsBar.left)
+                .attr("x2", xRedPortion)
+                .attr("y1", yearAddedScale(d['year_added']))
+                .attr("y2", yearAddedScale(d['year_added']))
+                .style("stroke", "crimson")
+                .style("stroke-width", 30)
+
+              var movieTextMargin = 15;
+              svgBar.append("text")
+                .attr("text-anchor", "middle")
+                .attr("font-size", "10px")
+                .attr("x", xRedPortion - movieTextMargin)
+                .attr('y', yearAddedScale(d['year_added']) + 4)
+                .attr("fill", "white")
+                .text((moviePercentage * 100).toFixed(0).concat("%"));
+            }
+
+            if (releasedTVCount > 0) {
+              svgBar.append("line")
+                .attr("x1", xRedPortion)
+                .attr("x2", releaseCountScale(d['release_count']))
+                .attr("y1", yearAddedScale(d['year_added']))
+                .attr("y2", yearAddedScale(d['year_added']))
+                .style("stroke", "black")
+                .style("stroke-width", 30)
+
+              var tvTextMargin = 15;
+              svgBar.append("text")
+                .attr("text-anchor", "middle")
+                .attr("font-size", "10px")
+                .attr("x", releaseCountScale(d['release_count']) - tvTextMargin)
+                .attr('y', yearAddedScale(d['year_added']) + 4)
+                .attr("fill", "white")
+                .text((tvPerecentage * 100).toFixed(0).concat("%"));
+
+            }
+
+            var totalTextMargin = textMargin(releasedTVCount, [10, 15, 20, 25])
+            svgBar.append("text")
+              .attr("text-anchor", "middle")
+              .attr("font-size", "15px")
+              .attr("x", releaseCountScale(d['release_count']) + totalTextMargin)
+              .attr('y', yearAddedScale(d['year_added']) + 5)
+              .text(d['release_count']);
+          });
+        },
+          (error) => { console.log(error) });
+    </script>
+
+    <script>
+
+      const svg2 = d3.select("svg#plot1");
+      const width2 = svg2.attr("width");
+      const height2 = svg2.attr("height");
+      const margin = {"top": 30, "right": 10, "bottom": 40, "left": 40};
+      const chartwidth2 = width2 - margin.left - margin.right;
+      const chartheight2 = height2 - margin.top - margin.bottom;
+
+      const svg = d3.select("svg#genrevstime");
+      const width = svg.attr("width");
+      const height = svg.attr("height");
+      const margins = {"top": 20, "right": 20, "bottom": 225, "left": 75};
+      const plotWidth = width - margins.left - margins.right;
+      const plotHeight = height - margins.top - margins.bottom;
+
+      let scatter = svg.append("g")
+                      .attr("transform", "translate("+margins.left+","+margins.right+")");
+
+      d3.csv("MoviesOnStreamingPlatforms_updated.csv").then( (data) => {
+
+        // Filtering data
+        data1 = data.filter( (d) => {return d['Genres'] != ""});
+
+        data1.forEach( (d,i) => {
+          d['Year'] = Number(d['Year']);
+          d['Genre'] = d['Genres'].split(',');
+        });
+
+        console.log(data1)
+
+        let allGenres = [];
+        let allGenresArray = [];
+        data1.forEach( (d,i) => {
+          var genreArr = d['Genres'].split(',');
+          genreArr.forEach( (p) => {
+            if (allGenresArray.includes(p) === false && p != "") {
+              allGenresArray.push(p)
+              var obj = new Object();
+              obj.genre = p;
+              allGenres.push(obj);
+            };
+          });
+
+        });
+
+
+        let action_count = 0;
+        let scifi_count = 0;
+        let comedy_count = 0;
+        let animation_count = 0;
+        let sport_count = 0;
+        let documentary_count = 0;
+        let horror_count = 0;
+
+        let ac_1930 = 0;
+        let ac_1940 = 0;
+        let ac_1950 = 0;
+        let ac_1960 = 0;
+        let ac_1970 = 0;
+        let ac_1980 = 0;
+        let ac_1990 = 0;
+        let ac_2000 = 0;
+        let ac_2010 = 0;
+
+        let sfc_1930 = 0;
+        let sfc_1940 = 0;
+        let sfc_1950 = 0;
+        let sfc_1960 = 0;
+        let sfc_1970 = 0;
+        let sfc_1980 = 0;
+        let sfc_1990 = 0;
+        let sfc_2000 = 0;
+        let sfc_2010 = 0;
+
+        let cc_1930 = 0;
+        let cc_1940 = 0;
+        let cc_1950 = 0;
+        let cc_1960 = 0;
+        let cc_1970 = 0;
+        let cc_1980 = 0;
+        let cc_1990 = 0;
+        let cc_2000 = 0;
+        let cc_2010 = 0;
+
+        let anc_1930 = 0;
+        let anc_1940 = 0;
+        let anc_1950 = 0;
+        let anc_1960 = 0;
+        let anc_1970 = 0;
+        let anc_1980 = 0;
+        let anc_1990 = 0;
+        let anc_2000 = 0;
+        let anc_2010 = 0;
+
+        let sc_1930 = 0;
+        let sc_1940 = 0;
+        let sc_1950 = 0;
+        let sc_1960 = 0;
+        let sc_1970 = 0;
+        let sc_1980 = 0;
+        let sc_1990 = 0;
+        let sc_2000 = 0;
+        let sc_2010 = 0;
+
+        let dc_1930 = 0;
+        let dc_1940 = 0;
+        let dc_1950 = 0;
+        let dc_1960 = 0;
+        let dc_1970 = 0;
+        let dc_1980 = 0;
+        let dc_1990 = 0;
+        let dc_2000 = 0;
+        let dc_2010 = 0;
+
+        let fc_1930 = 0;
+        let fc_1940 = 0;
+        let fc_1950 = 0;
+        let fc_1960 = 0;
+        let fc_1970 = 0;
+        let fc_1980 = 0;
+        let fc_1990 = 0;
+        let fc_2000 = 0;
+        let fc_2010 = 0;
+
+        let a_total = 0;
+        let sf_total = 0;
+        let c_total = 0;
+        let an_total = 0;
+        let g_total = 0;
+        let d_total = 0;
+        let h_total = 0;
+
+        let seventies = 0;
+        let eighties = 0;
+        let nineties = 0;
+        let twothousands = 0;
+        let twothousandtens = 0;
+        data1.forEach( (d) => {
+            if ( (d['Genre'] == "Action") || (d['Genre'] == "Adventure") ) {
+              action_count = action_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                a_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                ac_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                ac_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                ac_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                ac_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                ac_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Sci-Fi") || (d['Genre'] == "Fantasy") ) {
+              scifi_count = scifi_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                sf_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                sfc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                sfc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                sfc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                sfc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                sfc_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Comedy") || (d['Genre'] == "Romance") ) {
+              comedy_count = comedy_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                c_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                cc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                cc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                cc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                cc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                cc_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Animation") || (d['Genre'] == "Family") ) {
+              animation_count = animation_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                an_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                anc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                anc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                anc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                anc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                anc_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Mystery") || (d['Genre'] == "Crime") ) {
+              sport_count = sport_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                g_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                sc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                sc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                sc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                sc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                sc_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Documentary") || (d['Genre'] == "Biography") ) {
+              documentary_count = documentary_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                d_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                dc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                dc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                dc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                dc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                dc_2010 +=1
+              }
+            };
+
+            if ( (d['Genre'] == "Horror") || (d['Genre'] == "Thriller") ) {
+              horror_count = horror_count+1;
+              if ( (d['Year']>=1970) && (d['Year']<2020) ) {
+                h_total+=1
+              }
+              if (d['Year']>=1970 && d['Year']<1980) {
+                seventies +=1
+                fc_1970 +=1
+              }
+              if (d['Year']>=1980 && d['Year']<1990) {
+                eighties +=1
+                fc_1980 +=1
+              }
+              if (d['Year']>=1990 && d['Year']<2000) {
+                nineties +=1
+                fc_1990 +=1
+              }
+              if (d['Year']>=2000 && d['Year']<2010) {
+                twothousands +=1
+                fc_2000 +=1
+              }
+              if (d['Year']>=2010 && d['Year']<2020) {
+                twothousandtens +=1
+                fc_2010 +=1
+              }
+            };
+
+        });
+
+        // Creating arrays and objects of with year and genre data
+        let decade_70 = [{action: ac_1970}, {scifi: sfc_1970}, {comedy: cc_1970}, {animation: anc_1970}, {mystery: sc_1970}, {documentary: dc_1970}, {horror: fc_1970}];
+        let decade_80 = [{action: ac_1980}, {scifi: sfc_1980}, {comedy: cc_1980}, {animation: anc_1980}, {mystery: sc_1980}, {documentary: dc_1980}, {horror: fc_1980}];
+        let decade_90 = [{action: ac_1990}, {scifi: sfc_1990}, {comedy: cc_1990}, {animation: anc_1990}, {mystery: sc_1990}, {documentary: dc_1990}, {horror: fc_1990}];
+        let decade_00 = [{action: ac_2000}, {scifi: sfc_2000}, {comedy: cc_2000}, {animation: anc_2000}, {mystery: sc_2000}, {documentary: dc_2000}, {horror: fc_2000}];
+        let decade_10 = [{action: ac_2010}, {scifi: sfc_2010}, {comedy: cc_2010}, {animation: anc_2010}, {mystery: sc_2010}, {documentary: dc_2010}, {horror: fc_2010}];
+
+        let decade_genre_count = [{year: 1975, count: decade_70}, {year: 1985, count: decade_80}, {year: 1995, count: decade_90}, {year: 2005, count: decade_00}, {year: 2015, count: decade_10}];
+
+        let action_data = [{year: 1975, count: (ac_1970/seventies), name: "Action and Adventure Movies"}, {year: 1985, count: (ac_1980/eighties), name: "Action and Adventure Movies"}, {year: 1995, count: (ac_1990/nineties), name: "Action and Adventure Movies"}, {year: 2005, count: (ac_2000/twothousands), name: "Action and Adventure Movies"}, {year: 2015, count: (ac_2010/twothousandtens), name: "Action and Adventure Movies"}];
+        let scifi_data = [{year: 1975, count: (sfc_1970/seventies), name: "Sci-Fi and Fantasy Movies"}, {year: 1985, count: (sfc_1980/eighties), name: "Sci-Fi and Fantasy Movies"}, {year: 1995, count: (sfc_1990/nineties), name: "Sci-Fi and Fantasy Movies"}, {year: 2005, count: (sfc_2000/twothousands), name: "Sci-Fi and Fantasy Movies"}, {year: 2015, count: (sfc_2010/twothousandtens), name: "Sci-Fi and Fantasy Movies"}];
+        let comedy_data = [{year: 1975, count: (cc_1970/seventies), name: "Comedy and Romance Movies"}, {year: 1985, count: (cc_1980/eighties), name: "Comedy and Romance Movies"}, {year: 1995, count: (cc_1990/nineties), name: "Comedy and Romance Movies"}, {year: 2005, count: (cc_2000/twothousands), name: "Comedy and Romance Movies"}, {year: 2015, count: (cc_2010/twothousandtens), name: "Comedy and Romance Movies"}];
+        let animation_data = [{year: 1975, count: (anc_1970/seventies), name: "Family and Animation Movies"}, {year: 1985, count: (anc_1980/eighties), name: "Family and Animation Movies"}, {year: 1995, count: (anc_1990/nineties), name: "Family and Animation Movies"}, {year: 2005, count: (anc_2000/twothousands), name: "Family and Animation Movies"}, {year: 2015, count: (anc_2010/twothousandtens), name: "Family and Animation Movies"}];
+        let mystery_data = [{year: 1975, count: (sc_1970/seventies), name: "Mystery and Crime Movies"}, {year: 1985, count: (sc_1980/eighties), name: "Mystery and Crime Movies"}, {year: 1995, count: (sc_1990/nineties), name: "Mystery and Crime Movies"}, {year: 2005, count: (sc_2000/twothousands), name: "Mystery and Crime Movies"}, {year: 2015, name: "Mystery and Crime Movies", count: (sc_2010/twothousandtens), name: "Mystery and Crime Movies"}];
+        let documentary_data = [{year: 1975, count: (dc_1970/seventies), name: "Documentary and Biography Movies"}, {year: 1985, count: (dc_1980/eighties), name: "Documentary and Biography Movies"}, {year: 1995, count: (dc_1990/nineties), name: "Documentary and Biography Movies"}, {year: 2005, count: (dc_2000/twothousands), name: "Documentary and Biography Movies"}, {year: 2015, count: (dc_2010/twothousandtens), name: "Documentary and Biography Movies"}];
+        let horror_data = [{year: 1975, count: (fc_1970/seventies), name: "Thiller and Horror Movies"}, {year: 1985, count: (fc_1980/eighties), name: "Thiller and Horror Movies"}, {year: 1995, count: (fc_1990/nineties), name: "Thiller and Horror Movies"}, {year: 2005, count: (fc_2000/twothousands), name: "Thiller and Horror Movies"}, {year: 2015, count: (fc_2010/twothousandtens), name: "Thiller and Horror Movies"}];
+
+        let all = [action_data, scifi_data, comedy_data, animation_data, mystery_data, documentary_data, horror_data]
+        let count = [action_count, scifi_count, comedy_count, comedy_count, animation_count, sport_count, documentary_count, horror_count];
+
+        let count_list = [];
+        let year_list = []
+        all.forEach( (d) => {
+          d.forEach( (e) => {
+            count_list.push(e['count']);
+            year_list.push(e['year'])
+          });
+        });
+
+        // Setting scales
+        const year_max = Math.max.apply(Math, year_list);
+        const year_min = Math.min.apply(Math, year_list);
+
+        const count_max = Math.max.apply(Math, count_list);
+        const count_min = Math.min.apply(Math, count_list);
+
+        const genres = d3.map(allGenres, d => d.genre);
+
+        const countExtent = d3.extent([count_min, count_max]);
+        const countScale = d3.scaleLinear().domain(countExtent)
+                                          .range([plotHeight, 0]);
+
+
+        const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+
+
+        const genreScale = d3.scaleBand().domain(genres).range([0, plotWidth]).padding(.1);
+
+
+        const yearExtent = d3.extent([year_min-5, year_max+5]);
+        const yearScale = d3.scaleLinear().domain(yearExtent)
+                                          .range([0, plotWidth]);
+
+        // Add title
+        let title_place = d3.select("div#title")
+        let title = title_place.append("text")
+                               .text("Comparing Percentage of Movies Released Per Decade Over Different Genres")
+                               .style("margin-left", '110px');
+
+
+        // Set axis
+        let bottomGridlines = d3.axisBottom(yearScale)
+                          .tickSize(-plotHeight-10)
+                          .tickFormat("")
+                          .ticks(6)
+
+        let bottomAxis = d3.axisBottom(yearScale)
+                   .tickFormat(d3.format("~f"))
+                   .ticks(6)
+
+        svg.append("g")
+          .attr("class", "x gridlines")
+          .attr("transform","translate("+margins.left+","+(plotHeight+margins.top+10)+")")
+          .call(bottomGridlines)
+          .lower();
+
+        svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform","translate("+margins.left+","+(plotHeight+margins.top+10)+")")
+              .call(bottomAxis)
+           .append('text')
+              .text("Decade of Release")
+              .attr("fill", "black")
+              .attr('x', 350)
+              .attr('y', 40)
+              .style('font-size', "15px")
+
+        let leftGridlines = d3.axisLeft(countScale)
+                        .tickSize(-plotWidth-10)
+                        .tickFormat("");
+
+        let leftAxis = d3.axisLeft(countScale)
+                    .tickFormat(d3.format("~%"));
+
+        svg.append("g")
+          .attr("class", "y gridlines")
+          .attr("transform","translate("+ (margins.left-10) +","+ margins.top +")")
+          .call(leftGridlines)
+          .lower();
+
+        svg.append("g")
+              .attr("class", "y axis")
+              .attr("transform","translate("+(margins.left-10)+","+margins.top+")")
+              .call(leftAxis)
+            .append('text')
+                .text("Percent of Released Movies Per Decade")
+                .attr("fill", "black")
+                .attr('x', -100)
+                .attr('y', -40)
+                .attr("transform", "rotate(-90)")
+                .style('font-size', "15px")
+
+        // Add legend
+        let legend = svg.append("rect")
+                        .attr("id", "key")
+                        .attr("x", 275)
+                        .attr("y", 490)
+                        .attr("width", 300)
+                        .attr("height", 150)
+                        .attr("stroke", "darkgrey")
+                        .attr("fill", "white")
+
+        const yLegendScale = d3.scaleLinear().domain([0,6])
+                                          .range([620, 520]);
+
+        // Add data to graph
+        all.forEach( (g,i) => {
+
+          g.forEach( (d) => {
+
+            // Append data points
+            let circle = scatter.append("circle")
+                  .attr( "cx", yearScale(d['year']) )
+                  .attr( "cy", countScale(d['count']) )
+                  .attr( "r", 7 )
+                  .attr( "fill", colorScale(i) )
+                  .attr( "opacity", 0.7 )
+                  .attr("id", d['name'])
+
+            // Add genres to legend
+            let text = svg.append("text")
+                         .text(d['name'])
+                         .attr('x', 285)
+                         .attr('y', yLegendScale(i))
+                         .attr('fill', colorScale(i))
+          });
+
+          // Add connecting line
+          var lineGen = d3.line()
+                  .x( d => yearScale(d['year']) )
+                  .y( d => countScale(d['count']) )
+                  .curve(d3.curveMonotoneX);
+
+          scatter.append("path")
+                   .datum(g)
+                   .attr("class", "line")
+                   .attr("fill", "none")
+                   .attr("stroke", colorScale(i))
+                   .attr("stroke-width", 1.5)
+                   .attr("d", lineGen);
+
+        });
+
+        // Filter data
+        data2 = data.filter( (d) => {return d['IMDb'] != NaN  &&
+                                      d['IMDb'] != undefined &&
+                                      d['Rotten Tomatoes'] != "" &&
+                                      d['Rotten Tomatoes'] != NaN ;});
+
+         data2.forEach( (d, i) => {
+                     d['Rotten Tomatoes'] = Number(d['Rotten Tomatoes'].replace(/%/g, ''));
+                     d['IMDb'] = Number(d['IMDb']);
+                      d['Netflix'] = Number(d['Netflix']);
+                      d['Disney+'] = Number(d['Disney+']);
+                      d['Hulu'] = Number(d['Hulu']);
+                      d['Prime Video'] = Number(d['Prime Video']);
+         });
+
+        // Set scales
+        let annotations = svg2.append("g").attr("id","annotations");
+        let maxIMDb = d3.max(data2, (d) => { return Math.max(d['IMDb']); });
+        const IMDbScale = d3.scaleLinear()
+                             .domain([10, 0])
+                             .range([chartheight2, 0]);
+        let maxRotten = d3.max(data2, (d) => { return Math.max(d['Rotten Tomatoes']); });
+        const rottenScale = d3.scaleLinear()
+                             .domain([maxRotten, 0])
+                             .range([0, chartwidth2]);
+
+        const streamScale = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+        // Add axis
+        let leftAxis2 = d3.axisLeft(rottenScale);
+        let leftGridlines2 = d3.axisLeft(rottenScale);
+        annotations.append("g")
+                   .attr("class", "y axis")
+                   .attr("transform","translate("+(margin.left)+","+(margin.top)+")")
+                   .call(leftAxis2)
+        annotations.append("g")
+                   .attr("class", "y gridlines")
+                   .attr("transform","translate("+(margin.left)+","+(margin.top)+")")
+                   .call(leftGridlines2);
+
+        let bottomAxis2 = d3.axisBottom(IMDbScale);
+        let bottomGridlines2 = d3.axisBottom(IMDbScale);
+        annotations.append("g")
+                   .attr("class", "x axis")
+                   .attr("transform","translate("+margin.left+","+(chartheight2+margin.top)+")")
+                   .call(bottomAxis2);
+        annotations.append("g")
+                   .attr("class", "x gridlines")
+                   .attr("transform","translate("+margin.left+","+(chartheight2+margin.top)+")")
+                   .call(bottomGridlines2);
+
+        // Join data on chart
+        let chartArea = svg2.append("g").attr("id", "points")
+                      .attr("transform","translate("+margin.left+","+margin.top+")");
+
+        chartArea.selectAll("circle").data(data2)
+               .join("circle")
+               .attr("r", function(d){
+                            if (d['Netflix'] + d['Prime Video'] + d['Hulu'] + d['Disney+'] == 4)
+                            {return 12}
+                            if (d['Netflix'] + d['Prime Video'] + d['Hulu'] + d['Disney+'] == 3)
+                            {return 9}
+                            if (d['Netflix'] + d['Prime Video'] + d['Hulu'] + d['Disney+'] == 2)
+                            {return 6}
+                            if (d['Netflix'] + d['Prime Video'] + d['Hulu'] + d['Disney+'] == 1)
+                            {return 3}
+                        })
+                .attr("fill", "darkgreen")
+                .attr("opacity", 0.3)
+                .attr("ID", d => d['ID'])
+                .attr("cx", d => IMDbScale(d['IMDb']) )
+                .attr("cy", d => rottenScale(d['Rotten Tomatoes']) );
+
+
+
+        svg2.append("text")
+            .attr("class", "x label")
+            .attr("text-anchor", "middle")
+            .attr("x", width2/2 + 20)
+            .attr("y", height2-10)
+            .text("IMDb Scores");
+
+        svg2.append("text")
+            .attr("class", "y label")
+            .attr("text-anchor", "middle")
+            .attr("x", -width2/2 + 20)
+            .attr("y", 15)
+            .attr("transform", "rotate(-90)")
+            .text("Rotten Tomatoes Scores");
+
+        svg2.append("text")
+            .attr("class", "title")
+            .attr("text-anchor", "middle")
+            .attr("x",  width2/2)
+            .attr("y", 20)
+            .attr("font-family", "Century Gothic, CenturyGothic, AppleGothic, sans-serif")
+            .attr("font-size", "16px")
+            .attr("color", "darkgreen")
+            .text("Rating Distributions of Movies on Streaming Services");
+
+          });
+
+    </script>
+
+  </body>
