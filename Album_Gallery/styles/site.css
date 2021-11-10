@@ -1,0 +1,382 @@
+body {
+  background-color: black;
+  color: white;
+  font-family: monospace;
+}
+
+h1 {
+  font-family: monospace;
+  font-size: 48px;
+  text-align: center;
+}
+
+h4 {
+  color: black;
+  font-size: 20px;
+  margin-left: 10%;
+}
+
+h5 {
+  color: black;
+  font-size: 17px;
+  text-align: center;
+}
+
+form label{
+  color: black;
+  font-family: monospace;
+}
+
+a {
+  color: black;
+}
+
+
+p {
+  font-weight: bold;
+}
+
+.citation {
+  color: white;
+}
+
+.indiv_filter {
+  color: black;
+}
+
+.filter {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-right: 20px;
+  height: auto;
+  width: auto;
+  display: inline-block;
+}
+
+.filter_and_title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload_inputs {
+  margin-left: 25%;
+}
+
+.file_upload_button {
+  margin-left: 40%;
+  margin-top: 15px;
+  padding: 3px;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.file_upload_button:hover {
+  background-color: darkgray;
+  color: white;
+}
+
+.forms {
+  display: flex;
+  flex-direction: row;
+}
+
+.formadd {
+  padding: 15px;
+  border: 1px solid #666;
+  background: #fff;
+  display: none;
+}
+
+#pop_up_form {
+  display: block;
+  margin-left: 47%;
+  font-size: 15px;
+  font-family: monospace;
+  padding: 4px;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+}
+
+#pop_up_form:hover {
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.filter_total {
+  margin-left: 10%;
+  margin-right: 20%;
+}
+
+#filter_button {
+  font-size: 18px;
+  padding: 5px;
+}
+
+#filter_button:hover {
+  background-color: darkgrey;
+}
+
+
+.delete_form {
+  display: flex;
+  flex-direction: row;
+}
+
+label {
+  color: black;
+}
+
+.wrap_images {
+ display: flex;
+ flex-direction: row;
+ flex-wrap: wrap;
+}
+
+img {
+  display: flex;
+  flex-direction: row;
+  max-width: 300px;
+  height: auto;
+  border: 2px solid white;
+  margin: 5px;
+}
+
+img .selected_image {
+  border: 10px solid black;
+}
+
+.image_tags, .clicked_image {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 15%;
+  padding-right: 15%;
+  margin-right: 20%;
+}
+
+.clicked_image {
+  margin-top: 25%;
+  padding-top: 10%;
+  padding-right: 10%;
+}
+
+.details_tag {
+  color: black;
+  text-decoration: underline;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+p .or {
+  margin-left: 15px;
+  margin-right: 15px;
+  color: black;
+}
+
+.details_all {
+  display: inline-flex;
+  flex-direction: row;
+  margin: 10%;
+  padding: 25px;
+  background-color: white;;
+}
+
+.menu_button {
+  margin-top: 5%;
+  margin-left: 6%;
+  color: black;
+  padding: 10px;
+}
+
+#pop_up_menu {
+  background-color: lightgray;
+  padding-bottom: 10px;
+  font-size: 20px;
+  margin-right: 50%;
+  border: 0;
+}
+
+#pop_up_menu:hover {
+  background-color: darkgrey;
+  color: white;
+}
+
+.selected_image {
+  border: 3px solid black;
+  margin-bottom: 21%;
+}
+
+.hidden {
+  display: none;
+}
+
+.tag_add_button {
+  margin-left: 39%;
+  background-color: white;
+  border: 1px solid black;
+}
+
+.tag_add_button:hover {
+  background-color: darkgrey;
+  color: white;
+}
+
+#initial_delete {
+  background-color: white;
+  border: 1px solid black;
+}
+
+#initial_delete:hover {
+  background-color: darkgrey;
+  color: white;
+}
+
+#pop_up_add {
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+}
+
+#pop_up_add:hover {
+  background-color: darkgrey;
+  color: white;
+}
+
+#album_delete_button {
+  margin-left: 35%;
+  margin-top: 10%;
+  font-size: 15px;
+  font-family: monospace;
+  color: red;
+  background-color: white;
+  border: 1px solid black;
+}
+
+#album_delete_button:hover {
+  background-color: red;
+  color: lightgray;
+
+}
+
+.return {
+  color: white;
+}
+
+.album_and_details {
+  margin-right: 25%;
+}
+
+#for_add_button {
+  padding: 7px;
+  background-color: lightgray;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.tag_and_delete {
+  display: flex;
+  flex-direction: column;
+}
+
+.spec_album_wrap {
+  background-color: white;
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 5%;
+  justify-content: center;
+}
+
+.tag_for_img {
+  text-align: center;
+  margin-top: 5%;
+  font-size: 15px;
+}
+
+.delete_form {
+  text-align: center;
+  justify-content: center;
+}
+
+#tag_menu_button:hover {
+  background-color: black;
+  border: 1px solid white;
+  color: white;
+}
+
+#tag_menu_button {
+  margin-left: 48.5%;
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  margin-top: 3px;
+  font-size: 20px;
+}
+
+#pop_up_tag_delete {
+  background-color: white;
+  border: 1px solid black;
+  color: black;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.delete_but {
+  margin-left: 43%;
+}
+
+#pop_up_tag_delete:hover {
+  background-color: black;
+  border: 1px solid white;
+  color: white;
+}
+
+#tag_delete_button {
+  background-color: white;
+  border: 1px solid red;
+  color: red;
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+#tag_delete_button:hover {
+  background-color: red;
+  border: 1px solid white;
+  color: white;
+}
+
+.tag_form_label {
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+#file_error {
+  color: red;
+  margin-left: 5px;
+}
+
+.error_container {
+  display: flex;
+  flex-direction: column;
+}
