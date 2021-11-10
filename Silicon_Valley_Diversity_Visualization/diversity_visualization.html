@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title> INFO 3300 - Project 2</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <style>
+
+    text {
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+    }
+
+    .svgs {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .svgandbuttons {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .company_buttons {
+      background-color: #e7e7e7;
+      text-align: center;
+      padding-right: 30px;
+      padding-left: 30px;
+      padding-top: 10px;
+      padding-bottom: 0px;
+      margin-bottom: 15px;
+      margin-top: -10%;
+    }
+
+    .c_buttons {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin: 5px;
+        font-size: 12px;
+        background-color: inherit;
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #b8b8b8;
+    }
+
+    .svgs text {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+    }
+
+    svg text {
+        font-size: 12px;
+    }
+
+    .tab {
+        overflow: hidden;
+        border: 2px solid black;
+        background-color: #ffc283;
+        margin-bottom: 40px;
+        margin-top: 40px;
+        height: 50px;
+     }
+
+    .tab button {
+        background-color: #ffc283;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: default;
+        padding: 10px 20px;
+        margin-top: 5px;
+        transition: 0.2s;
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        font-size: 18px;
+        font-weight: bolder;
+        margin-left: 38.5%;
+        margin-right: -30%;
+    }
+
+    .tab button:hover {
+        background-color: #b8b8b8;
+    }
+
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+    .chartlegend {
+        margin-left: 20px;
+    }
+
+    .all {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .headers {
+      display: flex;
+      flex-direction: row;
+      margin-top: -2%;
+      width: 75%;
+    }
+
+    .barCaption {
+      margin-right: 20px;
+      width: 600px;
+    }
+
+    .pieCaption {
+      width: 600px;
+    }
+
+    #label {
+        font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        font-weight: bold;
+        margin-top: -2%;
+        padding: 5px;
+    }
+
+    .company_buttons p {
+        font-family:  Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+        font-weight: bolder;
+        background-color: #ffc283;
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    </style>
+
+  </head>
+    <body>
+        <!-- add project logo -->
+        <img src="images/project-logo1.png" alt = "Silicon Valley Project logo" class = "banner">
+
+        <!-- create buttons -->
+        <div id="button-bar" class = "tab"></div>
+
+        <!-- create chart titles and descriptions -->
+        <div class = 'all'>
+          <div class="headers">
+            <div class= "barCaption">
+              <h3 id= 'barTitle'></h3>
+              <p id= 'barCap'></p>
+            </div>
+            <div class= "pieCaption">
+              <h3 id= 'pieTitle'></h3>
+              <p id= 'pieCap'></p>
+            </div>
+          </div>
+
+          <!-- create legend -->
+          <div class = "chartlegend">
+              <svg id="legend" height="15" width ="550"></svg>
+          </div>
+
+          <!-- create div to hold all svgs and company specific buttons -->
+          <div class = 'svgandbuttons'>
+            <!-- create barchart svg -->
+            <div class= 'svgs' id = 'svgs'>
+              <svg id="stackedBar" height="400" width = "600"></svg>
+            </div>
+
+            <!-- create company buttons -->
+            <div id="company-buttons" class= "company_buttons">
+                <p>Select a Company</p>
+            </div>
+          </div>
+
+          <!-- create label to appear on hover -->
+          <div id="label" class= "vertical"></div>
+        </div>
+
+
+        <script>
+            // initialize variable to hold svg of bar chart
+            let svg = d3.select("svg#stackedBar");
+
+            //get height and width
+            var height = svg.attr("height")
+            var width = svg.attr("width")
+
+            //create margins and adjust chart
+            const margins = {"top": 10, "right": 50, "bottom": 80, "left": 50};
+            const chartWidth = width - margins.left - margins.right;
+            const chartHeight = height - margins.top - margins.bottom;
+
+
+            //get color scales -- used optimization tool: http://vrl.cs.brown.edu/color
+            var colorOptions = { "Race": ["#ffa600", "#003f5c", "#ff6361", "#58508d", "#bc5090"], "Gender": ["blue", "pink"] };
+            var colorOptions2 = { "Race": ["#ff6361", "#ffa600", "#58508d", "#003f5c", "#bc5090"], "Gender": ["blue", "pink"] };
+
+            // create keys for adjusting between race and gender visualizations
+            var key = ["Race", "Gender"];
+            var keys = { "Race": [" % White ", " % Asian ", " % Latino ", " % Black ", " % Multi "], "Gender": [" Male % ", " Female % "]};
+            var pRtoR = {'Race': {" % White ": "White", " % Asian ": "Asian", " % Latino ": "Latino", " % Black ": "Black", " % Multi ": "Multi"}, 'Gender': {' Female % ': "Female", " Male % ": "Male"}}
+
+            var barTitles = {'Race': "Breakdown of Employees’ Races in Top Tech Companies", 'Gender': "Breakdown of Employee Gender in Top Tech Companies"}
+            var barCaptions = {'Race': "Compares the proportion of each technology company’s employee body represented by each respective race. Which companies employ the smallest percentage of minorities? Which companies hire a fair representation of employees from all backgrounds?", 'Gender': "Compares the proportion of each technology company’s employee body represented by men and women. While STEM fields continue to be dominated by men, does this trend bleed into the Silicon Valley tech companies?"}
+            var pieCaptions = {'Race': 'Is there fair representation of all backgrounds as top executives and senior managers? Looking at the total employee diversity is important, but we must also ensure that there is adequate diversity in the highest ranks and among the decision makers.', 'Gender': 'Is there fair representation of females as top executives and senior managers? In a field still overly represented by men, how many tech change-makers are women?'}
+
+            //get barchart area
+            let annotations = svg.append("g").attr("id","annotations");
+            let stackedBar = svg.append("g")
+                    .attr("transform","translate(25,"+margins.top+")");
+
+            // create axis
+            const percentScale = d3.scaleLinear().domain([0,1]).range([chartHeight, 0]);
+            let leftAxis = d3.axisLeft(percentScale).tickFormat(d3.format('.0%'));
+
+            annotations.append("g")
+                       .attr("class", "y axis")
+                       .attr("transform",`translate(${margins.left},${margins.top})`)
+                       .call(leftAxis)
+
+            //company logos
+            var companyLogo = {"Apple" : 'images/apple.png', 'Cisco' : 'images/cisco.png', 'Facebook': 'images/facebook.png', 'Google': 'images/google.png', 'Intel': 'images/intel.png', 'LinkedIn': 'images/linkedin.png', 'Nvidia': 'images/nvidia.png', 'Pinterest': 'images/pinterest.png', 'Salesforce': 'images/salesforce.png', 'Twitter': 'images/twitter.png', 'Uber': 'images/uber.png', 'eBay': 'images/ebay.png'}
+            // Sources: apple.com, cisco.com, facebook.com, google.com, intel.com, linkedin.com, nvidia.com, pinterest.com, salesforce.com, twitter.com, uber.com, ebay.com
+
+            // get first dataset
+            d3.csv("group_company_final.csv", d3.autoType)
+                .then((data) => {
+
+                    // get second dataset
+                    const requestData = async () => {
+
+                      const pData = await d3.csv("eeo1-2015-2016.csv");
+
+                      // filter position data to include desired companies and years and to store data in desired type
+                      let positionData = pData.filter( (d) => {return (d['company'] === "Apple" || d['company'] === "Cisco" || d['company'] === "Facebook" || d['company'] === "Google" || d['company'] === "Intel" || d['company'] === "LinkedIn" || d['company'] === "Nvidia" || d['company'] === "Pinterest" || d['company'] === "Salesforce" || d['company'] === "Twitter" || d['company'] === "Uber" || d['company'] === "eBay") });
+                      positionData.forEach( (d,i) => {
+                        d['year'] = Number(d['Year']);
+                        d['count'] = Number(d['count']);
+                      });
+                      positionData = positionData.filter( (d) => {return d['year'] = 2016});
+
+                      const positions = d3.map(positionData, d => d.job_category)
+                      var distinctP = new Set(positions)
+
+                      const prace = d3.map(positionData, d => d.race)
+                      const distinctRace = new Set(prace)
+
+                      const r1tor2 = {" % White ": "White", " % Asian ": "Asian", " % Latino ": "Hispanic_or_Latino", " % Black ": "Black_or_African_American", " % Multi ": "Two_or_more_races"}
+                      const r2torClean = {'Race': {"White": "White", "Asian": "Asian", "Hispanic_or_Latino": "Hispanic or Latino", "Black_or_African_American": "Black or African American", "Two_or_more_races": "Two or More Races"}, 'Gender': {'male': "Male", 'female': 'Female'}}
+
+                      // filter to just get 1 year
+                      data = data.filter( (d) => {return d['Date'] === "Jan 2018"});
+
+                      const companies = d3.map(data, d => d.company);
+
+                      // loop through each distinct company, position and race to store data in a dictionary
+                      let racedatastructure = {};
+                      companies.forEach ( (c) => {
+                        let positionStructure = {};
+                        distinctP.forEach( (p) => {
+                          let raceStructure = {};
+                          distinctRace.forEach( (r) => {
+                            let rdata = positionData.filter( (d) => {return d['job_category'] === p && d['company'] === c && d['race'] === r});
+                            let count = 0;
+                            rdata.forEach( (rd) => {
+                              count = count + rd['count']
+                            });
+                            raceStructure[r] = count;
+                          });
+                          positionStructure[p] = raceStructure;
+                        });
+                        racedatastructure[c] = positionStructure;
+                      });
+
+                      // loop through each distinct company, position and gender to store data in a dictionary
+                      let distinctGender = ['male', 'female']
+                      let genderdatastructure = {};
+                      companies.forEach ( (c) => {
+                        let positionStructure = {};
+                        distinctP.forEach( (p) => {
+                          let genderStructure = {};
+                          distinctGender.forEach( (r) => {
+                            let rdata = positionData.filter( (d) => {return d['job_category'] === p && d['company'] === c && d['gender'] === r});
+                            let count = 0;
+                            rdata.forEach( (rd) => {
+                              count = count + rd['count']
+                            });
+                            genderStructure[r] = count;
+                          });
+                          positionStructure[p] = genderStructure;
+                        });
+                        genderdatastructure[c] = positionStructure;
+                      });
+
+                      // store these created dictionaries with keys 'Race' and 'Gender'
+                      let pDataStructure = {'Race': racedatastructure, 'Gender': genderdatastructure};
+
+
+                      // create x axis of companies for bar chart
+                      const companyScale = d3.scaleBand().domain(companies).range([5, chartWidth-margins.right])
+                                                       .padding(0.05);
+
+                      let bottomAxis = d3.axisBottom(companyScale);
+                      annotations.append("g")
+                                   .attr("class", "x axis")
+                                   .attr("transform",`translate(${margins.left},${chartHeight+margins.top+10})`)
+                                   .call(bottomAxis)
+                                  .selectAll("text")
+                                    .attr("y", 0)
+                                    .attr("x", 9)
+                                    .attr("dy", ".35em")
+                                    .attr("transform", "rotate(90)")
+                                    .style("text-anchor", "start");
+
+                      const barScale = d3.scaleLinear().domain([0,11]).range([margins.left, chartWidth-margins.right])
+
+                      const heightScale = d3.scaleLinear().domain([0,1]).range([0, chartHeight])
+
+                      // function to create pie chart
+                      function pieChart(filterType, company) {
+
+                        // remove existing pie chart and chart description
+                        d3.select("svg#default").remove();
+                        d3.select('h3#pieTitle').selectAll('text').remove();
+                        d3.select('h3#pieTitle').selectAll('img').remove();
+                        d3.select('p#pieCap').selectAll('text').remove();
+
+                        // add title and description for pie chart
+                        let pieTitles = {'Race': 'The Top Executives at ', 'Gender': 'The Top Executives at '};
+                        d3.select('h3#pieTitle').append('text')
+                                                .text(pieTitles[filterType])
+
+                        // add image to above title
+                        d3.select('h3#pieTitle').append('img')
+                                                .attr("src", companyLogo[company])
+                                                // .attr("width", "100px")
+                                                .attr("height", "20px")
+                                                .attr("display", "block")
+                        let pieTitles2 = {'Race': ' by '+ filterType +'', 'Gender': ' by '+ filterType +''};
+                        d3.select('h3#pieTitle').append('text')
+                                                .text(pieTitles2[filterType])
+
+                        var pieCaptions = {'Race': 'Is there fair representation of all backgrounds in '+ company +'’s top executives and senior managers? Looking at the total employee diversity is important, but we must also ensure that there is adequate diversity in the highest ranks and among the decision makers.', 'Gender': 'Is there fair representation of females in '+ company +'’s top executives and senior managers? In a field still overly represented by men, how many tech change-makers are women?'}
+                        d3.select('p#pieCap').append('text').text(pieCaptions[filterType])
+
+                        // initialize variables
+                        var data = pDataStructure[filterType][company]['Executives']
+
+                        var pwidth = 600
+                        var pheight = 410
+                        var pmargin = 50
+
+                        var radius = Math.min(pwidth, pheight) / 2 - pmargin
+
+                        // append new svg to hold pie chart
+                        var svg = d3.select("#svgs")
+                          .append("svg")
+                            .attr("width", pwidth)
+                            .attr("height", pheight)
+                            .attr('id', 'pie')
+                          .append("g")
+                            .attr("transform", "translate(" + (pwidth-3*pmargin) / 2 + "," + (pheight-pmargin) / 2 + ")");
+
+                        // crate pie chart color scale
+                        var color = d3.scaleOrdinal(colorOptions2[filterType]);
+                        var pie = d3.pie()
+                          .value(function(d) {return d.value; })
+
+                        // fit data to the form requried to create pie chart
+                        var mapped = [];
+                        Object.keys(data).forEach( d => {
+                          if (d !== "Overall_totals" && d !== "Native_Hawaiian_or_Pacific_Islander" && d !== "American_Indian_Alaskan_Native") {
+                            var map = {}
+                            map.key = d;
+                            map.value = data[d];
+                            mapped.push(map);
+                          }
+                        });
+
+                        var data_ready = pie(mapped)
+
+                        // create and append pie chart to the created svg
+                        let test = svg
+                          .selectAll('whatever')
+                          .data(data_ready)
+                          .enter()
+                          .append('path')
+                          .attr('d', d3.arc()
+                            .innerRadius(0)
+                            .outerRadius(radius)
+                          )
+                          .attr('fill', function(d){ return(color(d.data.key)) })
+                          .attr("stroke", "black")
+                          .attr("id", d=> r2torClean[filterType][d.data.key] + ': ' + Math.round((d.endAngle - d.startAngle)/(2*Math.PI)*100,4) + '%')
+                          .style("stroke-width", "1px")
+
+                          // on mouseover, display race / gender and percentage of that section
+                          .on("mouseover", function() {
+                            d3.select(this)
+                              .style('stroke-width', '3px')
+                            d3.select('#pie')
+                              .append('text')
+                              .text(this.id)
+                              .style("text-anchor", "middle")
+                              .attr('y', -60)
+                              .attr('x', 19)
+                              .attr('id', 'race_label')
+                              .attr('transform',`translate(${((pwidth)-(pmargin*4)-4)/2},${(pheight-pmargin*5)/2})`)
+                              .style('font-family', 'Century Gothic, CenturyGothic, AppleGothic, sans-serif');
+                          })
+
+                          // on mouseout, remove this label and styling
+                          .on("mouseout", function() {
+                            d3.select(this)
+                              .style('stroke-width', '1px')
+
+                            d3.select('#race_label').remove('text')
+                          });
+
+                        // add company title to chart
+                        d3.select('#pie').append('text').text(company).attr('transform',`translate(${((pwidth)-(pmargin*4))/2},${9})`).style('font-size', '12px').style('font-family', 'Century Gothic, CenturyGothic, AppleGothic, sans-serif')
+
+                      };
+
+                      // function for creating stacked bar chart
+                      function updateBarsAnimated(filterType) {
+
+                        // get desired lists and colors based on filtertype (race or gender)
+                        svg.selectAll("line").remove();
+                        let ft = keys[filterType];
+                        let colors = colorOptions[filterType];
+
+                        //loop through each company
+                        data.forEach ((d,i) => {
+                          var newHeight = chartHeight
+                          let companyRect = stackedBar.append('g')
+                                                      .attr('label', d.company);
+                          // loop through each race
+                          ft.forEach((race, spot) => {
+                            // remove 'undeclared' race
+                            if (race !== " % Undeclared ") {
+                              let r = r1tor2[race];
+
+                              //append rectangle
+                              let line = companyRect.append("line")
+                                                    .attr("x1", barScale(i))
+                                                    .attr("y1", newHeight)
+                                                    .attr("y2", newHeight- ((d[race])/100)*chartHeight)
+                                                    .attr("x2", barScale(i))
+                                                    .attr("stroke", colors[spot])
+                                                    .attr("stroke-width", 20)
+                                                    .attr("label", race)
+                                                    .attr('id', pRtoR[filterType][race]);
+
+                              // update start height for each stacked bar
+                              newHeight = newHeight - ((d[race])/100)*chartHeight;
+
+                              // display pie chart when mousing over each bar
+                              companyRect.on("mouseover", function() {
+                                d3.select("svg#pie").remove();
+                                pieChart(filterType, d.company);
+                              });
+
+                              // display race and percentage when mouseover each section of a stacked bar
+                              line.on("mouseover", function() {
+                                d3.select(this)
+                                    .transition().duration(200)
+                                    .attr("stroke-width", 30);
+
+                                d3.select("#label")
+                                  .style('background-color', '#E8E8E8')
+                                  .style('width', '480px')
+                                  .style('margin-left', '10px')
+                                  .style('padding', "5px");
+
+                                d3.select('#label')
+                                  .append('text')
+                                  .text(pRtoR[filterType][race]+": "+Math.round(d[race])+"%")
+                                  .style('color', colors[spot])
+                                  .style('margin-left', '200px')
+                              });
+
+                              // remove race and percentage when mouseout
+                              line.on("mouseout", function() {
+
+                                d3.select(this)
+                                    .transition().duration(200)
+                                    .attr("stroke-width", 20);
+
+                                d3.select("#label")
+                                  .text("")
+                                  .style('padding', '0px');
+
+                              });
+                            };
+
+                          });
+
+                        });
+
+                      };
+
+                      // function to update the bar chart legend based on filter type
+                      function updateLegend(filterType) {
+
+                        // initialize varibales to access desired html elements
+                        let legend = d3.select("svg#legend");
+                        let captions = d3.select('div.headers');
+
+                        let legWidth = legend.attr('width');
+                        let legHeight = legend.attr('height')
+                        legend.selectAll("text").remove();
+                        legend.selectAll("rect").remove();
+                        captions.selectAll("text").remove();
+
+                        // get desired list of races / genders and colors based on filter type
+                        let ft = keys[filterType];
+                        let colors = colorOptions[filterType];
+
+                        // append chart titles and descriptions
+                        d3.select('h3#barTitle').append('text').text(barTitles[filterType])
+                        d3.select('p#barCap').append('text').text(barCaptions[filterType])
+
+
+                        // create scales for legend positioning
+                        const legendRectScale = d3.scaleLinear().domain([0, ft.length]).range([0, legWidth-50])
+                        const legendTextScale = d3.scaleLinear().domain([0, ft.length]).range([20, legWidth-40])
+
+                        // loop through and add each race / gender to chart legend
+                        ft.forEach( (d,i)  => {
+                          let color = colors[i];
+                          let rectangle = legend.append("rect")
+                                                .attr('x', legendRectScale(i))
+                                                .attr('y', 5)
+                                                .attr('width', legHeight-5)
+                                                .attr('height', legHeight-5)
+                                                .attr('fill', color);
+                          let text = legend.append("text")
+                                            .text(d)
+                                            .attr('x', legendTextScale(i))
+                                            .attr('y', legHeight)
+                                            .attr('fill', color);
+
+                        });
+
+                      };
+
+                      // add a button for each company being considered in the data
+                      companies.forEach( d => {
+                        d3.select("div#company-buttons")
+                          .append("button")
+                          .text(d)
+                          .attr('id', d)
+                          .attr('class', 'c_buttons');
+                      });
+
+                      // function to create functionality of company buttons
+                      function updateButtons(filterType) {
+
+                        // loop through each button and display related pie chart when button is clicked
+                        let cr_buttons = companies.forEach( d => {
+                          d3.select('button#'+d)
+                            .on('click', function() {
+                              d3.select("svg#pie").remove();
+                              pieChart(filterType, d)
+                          });
+                        });
+
+                      };
+
+                      // loop through filter types (i.e. race and gender)
+                      key.forEach( d => {
+
+                          // For each filter type, add a new button to the button bar
+                          d3.select("div#button-bar")
+                            .append("button")
+                            .text( d )
+                            .on("click", function() {
+                              // When it's clicked, call updateBars to update the chart
+                              d3.select("svg#pie").remove();
+                              d3.select("svg#default").remove();
+
+                              d3.select('div#svgs').append('svg')
+                                                    .attr('id', 'default')
+                                                    .attr('width', 400)
+                                                    .attr('height', 400)
+                                                  .append('circle')
+                                                    .attr('cx', 0)
+                                                    .attr('cy', 0)
+                                                    .attr('r', 150)
+                                                    .style('fill', 'none')
+                                                    .style('stroke', 'black')
+                                                    .attr("transform", "translate(" + (600-3*50) / 2 + "," + (400-50) / 2 + ")");
+                              updateBarsAnimated( d );
+                              updateLegend( d );
+                              updateButtons( d );
+                            })
+                        });
+
+                        // set default blank circle where the position graph will be filled in
+                        d3.select('div#svgs').append('svg')
+                                              .attr('id', 'default')
+                                              .attr('width', 600)
+                                              .attr('height', 400)
+                                            .append('circle')
+                                              .attr('cx', 0)
+                                              .attr('cy', 0)
+                                              .attr('r', 150)
+                                              .style('fill', 'none')
+                                              .style('stroke', 'black')
+                                              .attr("transform", "translate(" + (600-3*50) / 2 + "," + (400-50) / 2 + ")");
+
+                        // call above functions to initialize with race
+                        updateBarsAnimated("Race");
+                        updateLegend("Race");
+                        updateButtons( "Race" );
+
+                    };
+
+
+                    requestData();
+                });
+
+
+        </script>
+    </body>
+
+</html>
