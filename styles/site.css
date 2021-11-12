@@ -103,15 +103,32 @@ a {
 }
 
 .p_image_l {
-  height: 500px;
-  width: 600px;
+  height: 400px;
+  width: 500px;
   margin-left: 100px;
+  padding: 20px;
 }
 
+
 .p_image_r {
-  height: 500px;
-  width: 600px;
+  height: 400px;
+  width: 500px;
   margin-right: 100px;
+  padding: 20px;
+}
+
+.p_image_r:hover {
+  transform: scale(1.1);
+}
+
+.p_image_l:hover {
+  transform: scale(1.1);
+}
+
+.click {
+  text-align: center;
+  font-size: 14px;
+  margin-top: -15px;
 }
 
 .exp_r {
