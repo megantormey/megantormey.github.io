@@ -1,0 +1,196 @@
+html {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background-color: #faf5e3;
+  margin: 0px;
+  padding: 0px;
+  color: #3d3d3d;
+}
+
+h1 {
+  margin-left: 2%;
+  font-size: 48px;
+}
+
+h2 {
+  color: #3d3d3d;
+}
+
+.header {
+  background-color: white;
+  color: #3d3d3d;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 3px 100px 3px 100px;
+  align-items: center;
+  margin-bottom: 3%
+}
+
+nav ul {
+  padding: 0px 20px 0px 20px;
+}
+nav ul li{
+  display: inline-block;
+  padding: 5px 20px 5px 10px;
+  font-family: monospace;
+  font-size: 24px;
+}
+nav a {
+  color: #3d3d3d;
+  text-decoration: none;
+}
+
+a {
+  color: #3d3d3d;
+}
+
+.my_face {
+  border-radius: 50%;
+  height: 500px;
+  width: auto;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.my_face_container {
+  margin: 15px;
+}
+
+.about {
+  margin-left: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.interest {
+  width: 450px;
+  font-size: 24px;
+}
+
+.about_me {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  justify-content: space-evenly;
+  margin: 0% 4% 2% 4%;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 75%;
+  margin-left: 12.5%;
+}
+
+.project {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-content: center;
+  background-color: white;
+  margin: 10px;
+  padding: 2%;
+  width: 1250px;
+}
+
+.p_image_l {
+  height: 500px;
+  width: 600px;
+  margin-left: 100px;
+}
+
+.p_image_r {
+  height: 500px;
+  width: 600px;
+  margin-right: 100px;
+}
+
+.exp_r {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 100px;
+}
+
+.exp_l {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 100px;
+}
+
+.description {
+  font-size: 18px;
+}
+
+.interests {
+  display: flex;
+  flex-direction: column;
+  margin-top: 7%;
+}
+
+.int-header {
+  background-color: white;
+  margin: 4%;
+  padding: 2%;
+  text-align: center;
+}
+
+.see_more {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.one {
+  background-color: white;
+  margin: 4%;
+  padding: 2%;
+  font-size: 24px;
+  width: 50%;
+  height: 100px;
+  text-align: center;
+}
+
+.my-interests {
+  display: flex;
+  flex-direction: column;
+}
+
+.int {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  margin: 2% 4% 2% 4%;
+  padding: 4%;
+  justify-content: space-around;
+}
+
+.hobby {
+  height: 300px;
+  width: 300px;
+  border-radius: 50%;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
+
+.explain {
+  width: 400px;
+}
+
+h3 {
+  text-align: center;
+}
