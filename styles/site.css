@@ -15,6 +15,12 @@ h1 {
   font-size: 48px;
 }
 
+.name {
+  text-decoration: underline;
+  font-size: 48px;
+  font-weight: bold;
+}
+
 h2 {
   color: #3d3d3d;
 }
