@@ -23,6 +23,7 @@ h1 {
 
 h2 {
   color: #3d3d3d;
+  font-size: 35px;
 }
 
 .header {
@@ -222,4 +223,8 @@ h3 {
 .desc {
   font-size: 24px;
   text-align: center;
+}
+
+.album_justify {
+  margin-left: 30%;
 }
