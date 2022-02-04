@@ -5,6 +5,17 @@ body {
   color: #3d3d3d;
 }
 
+h2 {
+  font-weight: bolder;
+  font-size: 35px;
+}
+
+h3 {
+  color: #e8a841;
+  font-weight: bolder;
+  font-size: 28px;
+}
+
 .section {
   padding: 10px;
 }
@@ -34,4 +45,26 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.pi {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.requirements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.sketch {
+  margin: 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.explain {
+  margin: 30px;
 }
