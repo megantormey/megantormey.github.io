@@ -68,3 +68,42 @@ h3 {
 .explain {
   margin: 30px;
 }
+
+.vid {
+  height: 400px;
+  width: 100%;
+}
+
+.eval {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.measure {
+  display: flex;
+  flex-direction: column;
+  border: solid lightgrey 1px;
+  padding: 10px;
+}
+
+.effective {
+  margin-left: 15%;
+}
+
+.social {
+  margin-right: 15%;
+}
+
+.rowone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.rowtwo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;
+}
