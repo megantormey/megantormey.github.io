@@ -177,7 +177,7 @@
       .style("font-size", "15px");
 
 
-    d3.csv("./netflix_titles.csv", d3.autoType)
+    d3.csv("/net_titles.csv", d3.autoType)
       .then((data) => {
         // Clean the Data
         data = data.filter(d => {
