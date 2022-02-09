@@ -4,14 +4,8 @@
 <head>
   <meta charset="utf-8">
   <title>Silicon Valley Diversity</title>
+  <link rel="stylesheet" type="text/css" href="../../styles/hci.css" media="all" />
 
-  <style>
-    a {
-      color: black;
-      font-size: 24px;
-      font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-    }
-  </style>
 
 </head>
 
@@ -21,239 +15,350 @@
     <a href="diversity_visualization.html">&#8592;</a>
   </div>
 
+
+
   <h1>Silicon Valley Diversity Visualization</h1>
 
-  <h2>About the Datasets:</h2>
-  <p>The first dataset we use is called 2018/W46: Diversity in Tech, which uses congregated companies and press reports
-    on
-    diversity at top tech companies. The variables of value in this dataset are the year, the type of company (i.e.
-    Social
-    Media, Tech, etc.), company name (AirBnB, eBay), the percent breakdowns of females and males, and the proportions of
-    white, Asian, Latino, black, multi-racial, or other-identifying employees. The makers of this dataset sifted through
-    the global employee data of several leading tech firms, where available, and inputted these percentages into the
-    dataset.
-    This dataset was particularly useful because it allowed us to see the representation across different races through
-    proportions of the total employee population. However, the second dataset, Silicon-Valley-Diversity-Data, provided
-    us
-    with more nuance for where the employee diversity lies within the different company tiers. This dataset comes from
-    EEO-1 reports from Silicon Valley tech companies, compiled by Reveal from The Center for Investigative Reporting.
-    This
-    dataset was created as a result of Reveal winning a Freedom of Information Act (FOIA) lawsuit against the U.S.
-    Department of
-    Labor last year. The variables in this dataset are the company names, the year the data was collected (2015), race,
-    gender, job category (Technicians, Administrative, Executive/Senior managers, Professionals, etc.), and the count of
-    employees in that category. Thus, the second dataset lets us understand how each identity is represented within the
-    different employee superiority levels.</p>
+  <div class="section">
+    <h2 class="sec_heading">About the Datasets:</h2>
+    <div class="contents">
+      <p>The first dataset we use is called 2018/W46: Diversity in Tech, which uses congregated companies and press
+        reports
+        on
+        diversity at top tech companies. The variables of value in this dataset are the year, the type of company (i.e.
+        Social
+        Media, Tech, etc.), company name (AirBnB, eBay), the percent breakdowns of females and males, and the
+        proportions
+        of
+        white, Asian, Latino, black, multi-racial, or other-identifying employees. The makers of this dataset sifted
+        through
+        the global employee data of several leading tech firms, where available, and inputted these percentages into the
+        dataset.
+        This dataset was particularly useful because it allowed us to see the representation across different races
+        through
+        proportions of the total employee population. However, the second dataset, Silicon-Valley-Diversity-Data,
+        provided
+        us
+        with more nuance for where the employee diversity lies within the different company tiers. This dataset comes
+        from
+        EEO-1 reports from Silicon Valley tech companies, compiled by Reveal from The Center for Investigative
+        Reporting.
+        This
+        dataset was created as a result of Reveal winning a Freedom of Information Act (FOIA) lawsuit against the U.S.
+        Department of
+        Labor last year. The variables in this dataset are the company names, the year the data was collected (2015),
+        race,
+        gender, job category (Technicians, Administrative, Executive/Senior managers, Professionals, etc.), and the
+        count
+        of
+        employees in that category. Thus, the second dataset lets us understand how each identity is represented within
+        the
+        different employee superiority levels.</p>
 
-  <p>Prior to building visualizations, the two datasets were merged so that for each company, data was provided on both
-    the
-    percent breakdowns for race and gender, as well as the counts of employees of each race and gender at each position
-    level. This merge was performed on Jupyter Notebook using the pandas package. Upon combining the two CSV files, to
-    eliminate repetition in the data for any given date, the dataset was grouped using groupby() by company and date.
-    The
-    second dataset used contained the company's breakdown by position based on race and gender across years. For this
-    dataset we chose to just use data from the most recent year,2016. To make the data accessible and usable,we created
-    a
-    dictionary of dictionaries with each company as a key to another dictionary with each position as a key to another
-    dictionary containing a breakdown by either race or gender (different data structure for race and gender). Then we
-    created a final dictionary to access both data structures based on the two filter types (race and gender). In our
-    final visualizations, we only used data about the executives at each company, but the data for each race and gender
-    of the
-    executives at each company were accessed through this data structure.</p>
+      <p>Prior to building visualizations, the two datasets were merged so that for each company, data was provided on
+        both
+        the
+        percent breakdowns for race and gender, as well as the counts of employees of each race and gender at each
+        position
+        level. This merge was performed on Jupyter Notebook using the pandas package. Upon combining the two CSV files,
+        to
+        eliminate repetition in the data for any given date, the dataset was grouped using groupby() by company and
+        date.
+        The
+        second dataset used contained the company's breakdown by position based on race and gender across years. For
+        this
+        dataset we chose to just use data from the most recent year,2016. To make the data accessible and usable,we
+        created
+        a
+        dictionary of dictionaries with each company as a key to another dictionary with each position as a key to
+        another
+        dictionary containing a breakdown by either race or gender (different data structure for race and gender). Then
+        we
+        created a final dictionary to access both data structures based on the two filter types (race and gender). In
+        our
+        final visualizations, we only used data about the executives at each company, but the data for each race and
+        gender
+        of the
+        executives at each company were accessed through this data structure.</p>
+    </div>
+  </div>
 
-  <h2>Design Rationale:</h2>
-  <p>The first visualizations, “Breakdown of Employees’ Races in Top Tech Companies” and “Breakdown of Employee Gender
-    in
-    Top Tech Companies”, allows us to understand the differences across the ten companies in their gender and race
-    representation in their employees. By using a stacked bar chart, with the y-axis from 0-100%, and the x-axis
-    representing each company, we can use the length of each color within the bar to compare the percentage of each race
-    or gender across companies. We decided to also have the bottom-most stack within each stacked bar to represent the
-    percentage of white employees, because not only is white the majority race, but it allows us to see more clearly the
-    lack of representation of minorities. Fluctuations in the bottom column are the most salient, since they all start
-    from the same starting position on the y-axis (0%), and thus we can compare how “white” every tech company is.
-    Comparing
-    the length of bars through a stacked bar chart is also easier than comparing surface areas of slices of two
-    different pie
-    charts, as varying length is typically easier to discern than varying surface areas. Thus, rather than create
-    multiple
-    pie charts for each company and comparing slices of the different pies, we decided against this information overload
-    and streamlined the process of deriving insight from visualizations through implementation of a stacked bar chart.
-  </p>
+  <div class="section">
+    <h2 class="sec_heading">Design Rationale:</h2>
+    <div class="contents">
+      <p>The first visualizations, “Breakdown of Employees' Races in Top Tech Companies” and “Breakdown of Employee
+        Gender
+        in
+        Top Tech Companies”, allows us to understand the differences across the ten companies in their gender and race
+        representation in their employees. By using a stacked bar chart, with the y-axis from 0-100%, and the x-axis
+        representing each company, we can use the length of each color within the bar to compare the percentage of each
+        race
+        or gender across companies. We decided to also have the bottom-most stack within each stacked bar to represent
+        the
+        percentage of white employees, because not only is white the majority race, but it allows us to see more clearly
+        the
+        lack of representation of minorities. Fluctuations in the bottom column are the most salient, since they all
+        start
+        from the same starting position on the y-axis (0%), and thus we can compare how “white” every tech company is.
+        Comparing
+        the length of bars through a stacked bar chart is also easier than comparing surface areas of slices of two
+        different pie
+        charts, as varying length is typically easier to discern than varying surface areas. Thus, rather than create
+        multiple
+        pie charts for each company and comparing slices of the different pies, we decided against this information
+        overload
+        and streamlined the process of deriving insight from visualizations through implementation of a stacked bar
+        chart.
+      </p>
 
-  <p>The marks in this stacked bar chart represent the percentage of employees for each company that fall within a
-    certain
-    race. For example, a mark in this chart is 54% in Apple’s “% White” column. We map this data onto the visual element
-    by using the following channels: position on the common scale (for the % White bars and % Multi bars, which start at
-    0
-    and 100% on the y-axis), position on the unaligned scale (for the rest of the bars), and length. These channels
-    represent
-    ordered or numerical attributes, however, an additional channel, color hue, represents the categorical attribute of
-    which race the data is representing. We did the same thing for the stacked bar chart for gender, where the blue
-    representing the percentage of employees that were male started as the bottom bar, thus we can see more clearly the
-    fluctuations to understand which companies are the most male-dominated. The magnitude channels which represent
-    numerical attributes are again positioned on common and unaligned scales, length, and the channel showing
-    categorical attributes
-    is color hue, which displays the gender attribute as male or female.</p>
+      <p>The marks in this stacked bar chart represent the percentage of employees for each company that fall within a
+        certain
+        race. For example, a mark in this chart is 54% in Apple’s “% White” column. We map this data onto the visual
+        element
+        by using the following channels: position on the common scale (for the % White bars and % Multi bars, which
+        start at
+        0
+        and 100% on the y-axis), position on the unaligned scale (for the rest of the bars), and length. These channels
+        represent
+        ordered or numerical attributes, however, an additional channel, color hue, represents the categorical attribute
+        of
+        which race the data is representing. We did the same thing for the stacked bar chart for gender, where the blue
+        representing the percentage of employees that were male started as the bottom bar, thus we can see more clearly
+        the
+        fluctuations to understand which companies are the most male-dominated. The magnitude channels which represent
+        numerical attributes are again positioned on common and unaligned scales, length, and the channel showing
+        categorical attributes
+        is color hue, which displays the gender attribute as male or female.</p>
 
-  <p>While at first, we were hesitant to jump too quickly into implementing pie charts to represent our data, we decided
-    that it was the best way to effectively portray the nuances in race and gender representation within the top
-    executives of
-    each company. We recognize that pie charts are not ideal for observing trends across multiple companies, or for
-    comparing more than a few pieces of data. However, after analyzing the tradeoffs that come from a pie chart, we
-    decided that it was the most effective communication tool to inform the audience with a meaningful data comparison
-    which
-    portrays the disparities in representation of identities within tech executives. Our goal for our second
-    visualization
-    was to do exactly that; we wanted to show the make-up of executives of each tech company, to provide more nuanced
-    insight into those at the top of Silicon Valley. Thus, we created our pie charts, “The Top Executives at [Company]
-    by
-    Race” and “The Top Executives at [Company] by Gender”. The marks in our pie graphs are the slices within each
-    pie.The
-    channels in these pie graphs are the area of each slice, which represents their percentage of the whole. Thus,
-    Cisco’s
-    79% Male is represented by a slice of the pie that makes up 76% of the total circle’s surface area. The second
-    channel
-    used in our pie charts are color hues, as blue represents the male identification, and pink the female
-    identification,
-    of the gender category, and different colors represent the different races as well. As we want to visualize the
-    make-up of gender and race of each company’s executive team, we can, at a glance, understand the proportion of the
-    whole that
-    each identity represents; especially in examining each company in isolation, the pie charts are an excellent
-    portrayal
-    of data.</p>
+      <p>While at first, we were hesitant to jump too quickly into implementing pie charts to represent our data, we
+        decided
+        that it was the best way to effectively portray the nuances in race and gender representation within the top
+        executives of
+        each company. We recognize that pie charts are not ideal for observing trends across multiple companies, or for
+        comparing more than a few pieces of data. However, after analyzing the tradeoffs that come from a pie chart, we
+        decided that it was the most effective communication tool to inform the audience with a meaningful data
+        comparison
+        which
+        portrays the disparities in representation of identities within tech executives. Our goal for our second
+        visualization
+        was to do exactly that; we wanted to show the make-up of executives of each tech company, to provide more
+        nuanced
+        insight into those at the top of Silicon Valley. Thus, we created our pie charts, “The Top Executives at
+        [Company]
+        by
+        Race” and “The Top Executives at [Company] by Gender”. The marks in our pie graphs are the slices within each
+        pie.The
+        channels in these pie graphs are the area of each slice, which represents their percentage of the whole. Thus,
+        Cisco's
+        79% Male is represented by a slice of the pie that makes up 76% of the total circle's surface area. The second
+        channel
+        used in our pie charts are color hues, as blue represents the male identification, and pink the female
+        identification,
+        of the gender category, and different colors represent the different races as well. As we want to visualize the
+        make-up of gender and race of each company's executive team, we can, at a glance, understand the proportion of
+        the
+        whole that
+        each identity represents; especially in examining each company in isolation, the pie charts are an excellent
+        portrayal
+        of data.</p>
+    </div>
+  </div>
 
-  <h2>Interactive Elements:</h2>
-  <p>Our project has a multitude of interactive elements, including1)the tab to switch between race and gender, 2)
-    displaying corresponding pie chart for each moused-over stacked bar, 3) displaying race/gender category and
-    percentage for each
-    moused-over stacked bar and enlarging them when moused-over, 3) emboldening moused-over slices of the pie chart, 4)
-    displaying the race/gender category and percentage of moused-over slices, and 5) interactive company selection tab
-    where users can click on the company for whom they wish to see a pie chart.</p>
+  <div class="section">
+    <h2 class="sec_heading">Interactive Elements:</h2>
+    <div class="contents">
+      <p>Our project has a multitude of interactive elements, including1)the tab to switch between race and gender, 2)
+        displaying corresponding pie chart for each moused-over stacked bar, 3) displaying race/gender category and
+        percentage for each
+        moused-over stacked bar and enlarging them when moused-over, 3) emboldening moused-over slices of the pie chart,
+        4)
+        displaying the race/gender category and percentage of moused-over slices, and 5) interactive company selection
+        tab
+        where users can click on the company for whom they wish to see a pie chart.</p>
 
-  <p>First, we would like to discuss our rationale between using mouseover as our interactivity prompt for displaying
-    race
-    and gender categories and percentages, as well as for displaying each stacked bar’s corresponding pie chart. There
-    is
-    a trade-off between using mouseover, rather than click, for our interactivity prompt. However, while click is
-    advantageous for its usability, we decided that mouseover is best suited for our purposes due to its quick
-    interactivity and ease
-    of exploration. The user, when interacting with the graph, can immediately discover how to derive more data off of
-    our
-    webpage. Immediately, upon moving their mouse even just a little, can discover that they have the power to more
-    closely examine each tech company’s executive team gender and race breakdown. While sometimes mouseover can get
-    confusing with
-    what exactly is being moused-over which brings about a certain outcome, by enlarging, emboldening, or highlighting
-    moused-over elements, users immediately understand what is focused on. Additionally, other visual elements, such as
-    appearing labels, headings, captions, and a useful legend, help the user understand our visualizations.</p>
+      <p>First, we would like to discuss our rationale between using mouseover as our interactivity prompt for
+        displaying
+        race
+        and gender categories and percentages, as well as for displaying each stacked bar's corresponding pie chart.
+        There
+        is
+        a trade-off between using mouseover, rather than click, for our interactivity prompt. However, while click is
+        advantageous for its usability, we decided that mouseover is best suited for our purposes due to its quick
+        interactivity and ease
+        of exploration. The user, when interacting with the graph, can immediately discover how to derive more data off
+        of
+        our
+        webpage. Immediately, upon moving their mouse even just a little, can discover that they have the power to more
+        closely examine each tech company's executive team gender and race breakdown. While sometimes mouseover can get
+        confusing with
+        what exactly is being moused-over which brings about a certain outcome, by enlarging, emboldening, or
+        highlighting
+        moused-over elements, users immediately understand what is focused on. Additionally, other visual elements, such
+        as
+        appearing labels, headings, captions, and a useful legend, help the user understand our visualizations.</p>
 
-  <p>Next, we would like to explain our jurisdiction in our tab bar. This is primarily because we were very passionate
-    about discovering insights into company diversity in terms of both race and gender; a company truly cannot be
-    inclusive and
-    equitable, much less successful, without appropriate representation across both categories. However, we did not want
-    to overwhelm the user with information about both categories at once. We decided it was best for them to first
-    understand
-    the visualizations of one aspect, and then have the ability to switch over to the other one when desired. We made
-    this
-    tab bar discoverable by placing it right underneath the project title, so immediately after the user reads the
-    title,
-    they will notice the options they have for data visualizations. We made them usable by darkening buttons hovered
-    over,
-    indicating that users have the ability to click on it to bring about a new visualization, as changing background
-    colors typically indicate on buttons.</p>
+      <p>Next, we would like to explain our jurisdiction in our tab bar. This is primarily because we were very
+        passionate
+        about discovering insights into company diversity in terms of both race and gender; a company truly cannot be
+        inclusive and
+        equitable, much less successful, without appropriate representation across both categories. However, we did not
+        want
+        to overwhelm the user with information about both categories at once. We decided it was best for them to first
+        understand
+        the visualizations of one aspect, and then have the ability to switch over to the other one when desired. We
+        made
+        this
+        tab bar discoverable by placing it right underneath the project title, so immediately after the user reads the
+        title,
+        they will notice the options they have for data visualizations. We made them usable by darkening buttons hovered
+        over,
+        indicating that users have the ability to click on it to bring about a new visualization, as changing background
+        colors typically indicate on buttons.</p>
 
-  <p>Our next interactive elements were enlarging and emboldening the moused-over stacked bars and pie slices. We also
-    displayed the stacked bars and pie slices category name and percentage value. This is actually quite an
-    extraordinary
-    feature, when combined, because it allows the user to toggle from the stacked bar, enlarge it and see the
-    corresponding percentage value, and then hover over the pie chart to see that corresponding percentage value. Then,
-    the user can
-    compare the two percentages to see how it changes between the overall employee population and just the executive
-    suite. For example, they can mouse over eBay’s “% White'' bar, and the label “% White: 52%” appears, and then they
-    view the
-    corresponding pie chart for eBay’s executive suite, mouse-over the “% White” slice, and see the “White: 77%” label.
-    Thus, they can derive the critical insight that the probability that an employee is white increases from 52% to 77%
-    when moving from the general employee population to the executive suite; thus, the user learns that the executive
-    suite is
-    misrepresented of the overall company diversity, and more white employees are promoted. The ability to combine
-    valuable information from graphs after mousing over the corresponding attributes makes these interactivity elements
-    quite
-    interesting, and their moused-over proponent makes them very discoverable and usable.</p>
+      <p>Our next interactive elements were enlarging and emboldening the moused-over stacked bars and pie slices. We
+        also
+        displayed the stacked bars and pie slices category name and percentage value. This is actually quite an
+        extraordinary
+        feature, when combined, because it allows the user to toggle from the stacked bar, enlarge it and see the
+        corresponding percentage value, and then hover over the pie chart to see that corresponding percentage value.
+        Then,
+        the user can
+        compare the two percentages to see how it changes between the overall employee population and just the executive
+        suite. For example, they can mouse over eBay's “% White'' bar, and the label “% White: 52%” appears, and then
+        they
+        view the
+        corresponding pie chart for eBay's executive suite, mouse-over the “% White” slice, and see the “White: 77%”
+        label.
+        Thus, they can derive the critical insight that the probability that an employee is white increases from 52% to
+        77%
+        when moving from the general employee population to the executive suite; thus, the user learns that the
+        executive
+        suite is
+        misrepresented of the overall company diversity, and more white employees are promoted. The ability to combine
+        valuable information from graphs after mousing over the corresponding attributes makes these interactivity
+        elements
+        quite
+        interesting, and their moused-over proponent makes them very discoverable and usable.</p>
 
-  <p>Finally, our company selection tab allows the user to specify which company’s executive suite they wish to observe.
-    This tab is made obvious through its distinct background color and border; further, it is usable as it uses the same
-    stylistic attributes as the Race-Gender tab. Users will be eager to take advantage of this feature if they hope to
-    focus on the executive suites of multiple companies, and compare the values, without having to hover over all the
-    different
-    stacked bars.</p>
+      <p>Finally, our company selection tab allows the user to specify which company’s executive suite they wish to
+        observe.
+        This tab is made obvious through its distinct background color and border; further, it is usable as it uses the
+        same
+        stylistic attributes as the Race-Gender tab. Users will be eager to take advantage of this feature if they hope
+        to
+        focus on the executive suites of multiple companies, and compare the values, without having to hover over all
+        the
+        different
+        stacked bars.</p>
+    </div>
+  </div>
 
-  <h2>The Story:</h2>
-  <p>Technology inextricably integrated into almost every aspect of our lives has an unimaginably significant influence
-    on
-    who we are, what we think, and how we interact. What’s more is that a significant portion of the technology we do
-    use
-    is controlled by a select few tech giants, such as Google, Facebook, or Apple. In order to make the utilization and
-    implementation of technology not just equitable, but empowering, for every individual possible, technology companies
-    without a doubt must prioritize diversity of people, diversity of thought, and diversity of experiences. This all
-    starts with who they employ to engineer, market, sell, or administer their technologies, with whom they share the
-    power of
-    influence. Unfortunately, it is unmistakably obvious that the Silicon Valley, and the most influential tech giants
-    at
-    the top of it, fail us in their employee diversity. This data analysis uncovers the disparities in employment across
-    race and gender within Silicon Valley’s key players, and highlights the inequalities posing issues to us not just as
-    consumers, but as employees of these very companies.</p>
+  <div class="section">
+    <h2 class="sec_heading">The Story:</h2>
+    <div class="contents">
+      <p>Technology inextricably integrated into almost every aspect of our lives has an unimaginably significant
+        influence
+        on
+        who we are, what we think, and how we interact. What's more is that a significant portion of the technology we
+        do
+        use
+        is controlled by a select few tech giants, such as Google, Facebook, or Apple. In order to make the utilization
+        and
+        implementation of technology not just equitable, but empowering, for every individual possible, technology
+        companies
+        without a doubt must prioritize diversity of people, diversity of thought, and diversity of experiences. This
+        all
+        starts with who they employ to engineer, market, sell, or administer their technologies, with whom they share
+        the
+        power of
+        influence. Unfortunately, it is unmistakably obvious that the Silicon Valley, and the most influential tech
+        giants
+        at
+        the top of it, fail us in their employee diversity. This data analysis uncovers the disparities in employment
+        across
+        race and gender within Silicon Valley's key players, and highlights the inequalities posing issues to us not
+        just as
+        consumers, but as employees of these very companies.</p>
 
-  <p>Our visualization displays the breakdown across race and gender for the top ten tech companies in Silicon Valley.
-    The
-    differences across each company in what proportion of the employee body is composed of each gender and race is
-    illustrated by the main visualization, the stacked bar chart. By setting each company as its own bar, and comparing
-    them across the x-axis, the audience can see which company has the most diverse employee body, or which company has
-    the
-    most equitable female representation. Our data visualizations gave us many surprising insights. First, the company
-    with the
-    largest proportion of white employees was Salesforce, meanwhile the smallest was Nvidia. Meanwhile, Nvidia also had
-    the smallest percentage of female employees, so while it has decent racial representation, it lacks gender equality.
-  </p>
+      <p>Our visualization displays the breakdown across race and gender for the top ten tech companies in Silicon
+        Valley.
+        The
+        differences across each company in what proportion of the employee body is composed of each gender and race is
+        illustrated by the main visualization, the stacked bar chart. By setting each company as its own bar, and
+        comparing
+        them across the x-axis, the audience can see which company has the most diverse employee body, or which company
+        has
+        the
+        most equitable female representation. Our data visualizations gave us many surprising insights. First, the
+        company
+        with the
+        largest proportion of white employees was Salesforce, meanwhile the smallest was Nvidia. Meanwhile, Nvidia also
+        had
+        the smallest percentage of female employees, so while it has decent racial representation, it lacks gender
+        equality.
+      </p>
 
-  <p>Additionally, LinkedIn and Pinterest have the best gender equality (58% and 55% male, respectively), but still,
-    LinkedIn’s executive suite is only 37% female, which, actually, is the highest percentage across all tech companies’
-    executive suites. Google (13%), Intel (13%), Nvidia (12%) and Pinterest (13%) all had the lowest percentage of
-    female
-    leaders, however across entire employee populations, Pinterest has the largest female percentage (45%), but Nvidia
-    the
-    smallest (17%). This contradiction highlights the importance of understanding the nuances in one’s data, and truly
-    taking a holistic approach to diversity. Even if a company has a seemingly equal representation of genders in its
-    employee body, it might not actually be that equitable, if females cannot hold leadership positions in the same
-    volume
-    as their male counterparts.</p>
+      <p>Additionally, LinkedIn and Pinterest have the best gender equality (58% and 55% male, respectively), but still,
+        LinkedIn's executive suite is only 37% female, which, actually, is the highest percentage across all tech
+        companies’
+        executive suites. Google (13%), Intel (13%), Nvidia (12%) and Pinterest (13%) all had the lowest percentage of
+        female
+        leaders, however across entire employee populations, Pinterest has the largest female percentage (45%), but
+        Nvidia
+        the
+        smallest (17%). This contradiction highlights the importance of understanding the nuances in one's data, and
+        truly
+        taking a holistic approach to diversity. Even if a company has a seemingly equal representation of genders in
+        its
+        employee body, it might not actually be that equitable, if females cannot hold leadership positions in the same
+        volume
+        as their male counterparts.</p>
 
-  <p>Examining our race stacked bar and pie graphs also gives us valuable information on each company’s diversity.
-    Surprisingly, Apple has the least amount of minority representation up top, with 82% of its executive suite being
-    white. On the other hand, Pinterest has the most minority representation, with 50% of its executive suite being
-    white.
-    However, Apple and Pinterest have similar percent white values for the total employee population, showing that while
-    a company
-    may look diverse on the surface, underneath, it might not always be equitable and inclusive. Twitter, Salesforce,
-    and
-    Pinterest were the only companies with no black executive members, despite having a typical percentage of black
-    employees. Uber and Apple both had the highest percentage of black employees, at 9%, however, only 3% of Apple’s and
-    1% of Uber’s executives were black.</p>
+      <p>Examining our race stacked bar and pie graphs also gives us valuable information on each company's diversity.
+        Surprisingly, Apple has the least amount of minority representation up top, with 82% of its executive suite
+        being
+        white. On the other hand, Pinterest has the most minority representation, with 50% of its executive suite being
+        white.
+        However, Apple and Pinterest have similar percent white values for the total employee population, showing that
+        while
+        a company
+        may look diverse on the surface, underneath, it might not always be equitable and inclusive. Twitter,
+        Salesforce,
+        and
+        Pinterest were the only companies with no black executive members, despite having a typical percentage of black
+        employees. Uber and Apple both had the highest percentage of black employees, at 9%, however, only 3% of Apple’s
+        and
+        1% of Uber's executives were black.</p>
 
-  <p>The most consistent and significant takeaways we found were that gender and race diversity in Silicon Valley is,
-    undoubtedly, unsatisfactory and frankly unacceptable. As the future leaders of this industry, we must task not just
-    ourselves, but our peers, classmates, even professors, which the knowledge we gained from our visualizations. Not
-    just
-    are certain demographics sorely and unacceptably misrepresented among some of Silicon Valley’s most influential
-    stakeholders, but this misrepresentation only worsens as employees move up in the ranks. More often than not, if a
-    company appears to be more diverse than the others in their general employee population, their executive suite still
-    maintains the same race and gender discrimination that we strive to fight against. Even if a tech company appears
-    “diverse” in who they have on their payroll, they might not always be equitable in the way they staff their board
-    room. We have to look beyond just generalized numbers, and find the discrimination that lies within the nuances of
-    company
-    heirarchy and influence. If Silicon Valley genuinely strives to be the equity safe haven that many companies pride
-    themselves in valuing, then they must show this with who they have not just in their warehouses, logistics centers,
-    or
-    sales departments, but more importantly, who they have sitting on the executive floor, who’s name signs off on the
-    decisions that impact millions and millions of users, from each and every background.</p>
+      <p>The most consistent and significant takeaways we found were that gender and race diversity in Silicon Valley
+        is,
+        undoubtedly, unsatisfactory and frankly unacceptable. As the future leaders of this industry, we must task not
+        just
+        ourselves, but our peers, classmates, even professors, which the knowledge we gained from our visualizations.
+        Not
+        just
+        are certain demographics sorely and unacceptably misrepresented among some of Silicon Valley's most influential
+        stakeholders, but this misrepresentation only worsens as employees move up in the ranks. More often than not, if
+        a
+        company appears to be more diverse than the others in their general employee population, their executive suite
+        still
+        maintains the same race and gender discrimination that we strive to fight against. Even if a tech company
+        appears
+        “diverse” in who they have on their payroll, they might not always be equitable in the way they staff their
+        board
+        room. We have to look beyond just generalized numbers, and find the discrimination that lies within the nuances
+        of
+        company
+        heirarchy and influence. If Silicon Valley genuinely strives to be the equity safe haven that many companies
+        pride
+        themselves in valuing, then they must show this with who they have not just in their warehouses, logistics
+        centers,
+        or
+        sales departments, but more importantly, who they have sitting on the executive floor, who's name signs off on
+        the
+        decisions that impact millions and millions of users, from each and every background.</p>
+    </div>
+  </div>
 
 </body>
 
