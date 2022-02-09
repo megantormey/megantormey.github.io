@@ -7,6 +7,10 @@
   <script src="https://d3js.org/d3.v6.min.js"></script>
 
   <style>
+    body {
+      height: fit-content;
+    }
+
     text {
       font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
     }
@@ -120,8 +124,11 @@
     #label {
       font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
       font-weight: bold;
-      margin-top: -2%;
       padding: 5px;
+      background-color: #E8E8E8;
+      width: 480px;
+      height: 20px;
+      margin-left: 20px;
     }
 
     .company_buttons p {
@@ -217,8 +224,8 @@
     var keys = { "Race": [" % White ", " % Asian ", " % Latino ", " % Black ", " % Multi "], "Gender": [" Male % ", " Female % "] };
     var pRtoR = { 'Race': { " % White ": "White", " % Asian ": "Asian", " % Latino ": "Latino", " % Black ": "Black", " % Multi ": "Multi" }, 'Gender': { ' Female % ': "Female", " Male % ": "Male" } }
 
-    var barTitles = { 'Race': "Breakdown of Employees’ Races in Top Tech Companies", 'Gender': "Breakdown of Employee Gender in Top Tech Companies" }
-    var barCaptions = { 'Race': "Compares the proportion of each technology company’s employee body represented by each respective race. Which companies employ the smallest percentage of minorities? Which companies hire a fair representation of employees from all backgrounds?", 'Gender': "Compares the proportion of each technology company’s employee body represented by men and women. While STEM fields continue to be dominated by men, does this trend bleed into the Silicon Valley tech companies?" }
+    var barTitles = { 'Race': "Breakdown of Employees' Races in Top Tech Companies", 'Gender': "Breakdown of Employee Gender in Top Tech Companies" }
+    var barCaptions = { 'Race': "Compares the proportion of each technology company's employee body represented by each respective race. Which companies employ the smallest percentage of minorities? Which companies hire a fair representation of employees from all backgrounds?", 'Gender': "Compares the proportion of each technology company's employee body represented by men and women. While STEM fields continue to be dominated by men, does this trend bleed into the Silicon Valley tech companies?" }
     var pieCaptions = { 'Race': 'Is there fair representation of all backgrounds as top executives and senior managers? Looking at the total employee diversity is important, but we must also ensure that there is adequate diversity in the highest ranks and among the decision makers.', 'Gender': 'Is there fair representation of females as top executives and senior managers? In a field still overly represented by men, how many tech change-makers are women?' }
 
     //get barchart area
@@ -350,7 +357,7 @@
             // add image to above title
             d3.select('h3#pieTitle').append('img')
               .attr("src", companyLogo[company])
-              // .attr("width", "100px")
+              .attr("width", "50px")
               .attr("height", "20px")
               .attr("display", "block")
             let pieTitles2 = { 'Race': ' by ' + filterType + '', 'Gender': ' by ' + filterType + '' };
@@ -484,12 +491,6 @@
                       .transition().duration(200)
                       .attr("stroke-width", 30);
 
-                    d3.select("#label")
-                      .style('background-color', '#E8E8E8')
-                      .style('width', '480px')
-                      .style('margin-left', '10px')
-                      .style('padding', "5px");
-
                     d3.select('#label')
                       .append('text')
                       .text(pRtoR[filterType][race] + ": " + Math.round(d[race]) + "%")
@@ -506,7 +507,6 @@
 
                     d3.select("#label")
                       .text("")
-                      .style('padding', '0px');
 
                   });
                 };
@@ -596,10 +596,11 @@
                 // When it's clicked, call updateBars to update the chart
                 d3.select("svg#pie").remove();
                 d3.select("svg#default").remove();
+                d3.select('h3#pieTitle').selectAll('img').remove();
 
                 d3.select('div#svgs').append('svg')
                   .attr('id', 'default')
-                  .attr('width', 400)
+                  .attr('width', 600)
                   .attr('height', 400)
                   .append('circle')
                   .attr('cx', 0)

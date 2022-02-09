@@ -1,0 +1,117 @@
+body {
+  background-color: #faf5e3;
+  margin: 10px;
+  padding: 0px;
+  color: #3d3d3d;
+}
+
+h1 {
+  font-weight: bolder;
+  font-size: 42px;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+h2 {
+  font-weight: bolder;
+  font-size: 35px;
+}
+
+h3 {
+  color: #6396f3;
+  font-weight: bolder;
+  font-size: 28px;
+}
+
+.section {
+  padding: 10px;
+}
+
+.sec_heading {
+  text-align: center;
+  background-color: #6396f3;
+  padding: 10px;
+}
+
+.contents {
+  background-color: white;
+  padding: 10px;
+}
+
+.back {
+  color: black;
+  font-size: 24px;
+  font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+
+.alink {
+  color: black;
+}
+
+.personas {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.pi {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.requirements {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.sketch {
+  margin: 25px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.explain {
+  margin: 30px;
+}
+
+.vid {
+  height: 400px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.eval {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.measure {
+  display: flex;
+  flex-direction: column;
+  border: solid lightgrey 1px;
+  padding: 10px;
+}
+
+.effective {
+  margin-left: 15%;
+}
+
+.social {
+  margin-right: 15%;
+}
+
+.rowone {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.rowtwo {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-top: 10px;
+}
