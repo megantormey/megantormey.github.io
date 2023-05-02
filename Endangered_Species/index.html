@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>INFO 4310 - Final Project</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://unpkg.com/topojson@3"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+
+    body {
+      font-family: "Poppins";
+      width: 2035px;
+    }
+
+    svg {
+      background-color: #e6e8eb;
+      color: #000000;
+    }
+
+    html {
+      background-color: #0a1c37;
+      color: #ffffff;
+      width: 2000px;
+    }
+
+    .filters {
+      /* width: 2035px; */
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+      background-color: #806a50;
+      padding: 5px;
+
+    }
+
+    #hov-lab {
+      background-color: white;
+      border: 1px solid black;
+      opacity: 0.8;
+      position: absolute;
+      font-size: 9pt;
+      padding: 2px 5px;
+    }
+
+    .mapandgraph {
+      display: flex;
+      flex-direction: row;
+    }
+
+    #graphsvg {
+      margin-left: 10px;
+    }
+
+    .gridlines {
+      color: #e1e5eb;
+    }
+
+    #tool {
+      background-color: #e6e8eb;
+      border: 1px solid lightgrey;
+      position: relative;
+      margin-left: 10px;
+      margin-top: 15px;
+    }
+
+    .tooltip {
+      position: sticky;
+      top: 0px;
+      left: 0px;
+      padding: 4px;
+      height: 50px;
+      width: 400px;
+
+    }
+
+    .graphandlabel {
+      display: flex;
+      flex-direction: column;
+      font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans", sans-serif;
+      color: #000000;
+    }
+
+    .banner {
+      display: flex;
+      color: #ffffff;
+    }
+
+
+
+    .banner>div {
+      flex: 1;
+      padding-left: 20px;
+      padding-right: 10px;
+
+    }
+
+    .cr-banner {
+      background-color: #9e1212;
+      margin-right: 30px;
+    }
+
+    .en-banner {
+      background-color: #c83a27;
+      margin-right: 30px;
+    }
+
+    .vu-banner {
+      background-color: #d66218;
+    }
+
+    h1 {
+      font-size: 60px;
+      text-align: center;
+      width: 95%;
+    }
+
+    h2 {
+      font-size: 30px;
+      margin-left: 5px;
+    }
+
+    p {
+      font-size: 24px;
+      text-align: justify;
+      padding: 10px;
+      width: 95%;
+    }
+
+    .all {
+      margin-left: 40px;
+      margin-right: 40px;
+      align-items: center;
+    }
+
+    .filters svg {
+      margin-right: 10px;
+    }
+
+    .barchart svg {
+      margin-top: 10px;
+    }
+
+    #mouseText {
+      text-align: center;
+      font-size: 30px;
+    }
+
+    div.thetooltip {
+      position: absolute;
+      text-align: center;
+      padding: .2rem;
+      background: #313639;
+      color: #f9f9f9;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+      font-size: .7rem;
+    }
+
+    #colorLegend {
+      display: flex;
+      flex-direction: row;
+      background-color: white;
+      padding: 3px;
+      justify-content: space-between;
+    }
+
+    #colorLegend text {
+      font-weight: 600;
+    }
+
+    #label {
+      background-color: rgba(#8a8989, 0.39);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class='all'>
+    <div class='intro'>
+      <h1>Species Endangerment Across the Globe</h1>
+      <p>Healthy ecosystems depend on plant and animal species as their foundations. When a species becomes endangered,
+        it is a sign that the ecosystem is slowly falling apart.
+        Each species that is lost triggers the loss of other species within its ecosystem. Humans depend on healthy
+        ecosystems to purify our environment.
+        <br><br>
+        According to the World Wildlife Fund, more than 96,500 species in the world today are considered endangered in
+        some way.
+        This is a staggering number by any measure, and even more alarming when one considers how much is already being
+        done to try and bring these amazing plants and animals away from the brink of annihilation.
+        Yet, despite the best efforts and intentions of some organizations, the problem is still getting worse.
+      </p>
+
+
+      <p>Experts perform a rigorous assessment of a given species to categorize it, asking a host of crucial questions.
+        Is the species’ habitat shrinking? If so, how quickly? How many individuals are there? Is that number dropping?
+        How drastically?
+        <br><br>
+        They look at what threats the species faces, too, and any actions underway to protect it.
+        While all these categories are important in evaluating life on Earth, the term ‘endangered’ refers specifically
+        to species listed as
+        <b>Critically Endangered</b>, <b>Endangered</b>, and <b>Vulnerable</b>. Here’s how that boils down:
+      </p>
+    </div>
+
+    <div class="banner">
+      <div class="cr-banner">
+        <h2>CRITICALLY ENDANGERED:</h2>
+        <p>A species considered to be facing an <b><em>extremely high</em></b> risk of extinction in the wild.</p>
+      </div>
+      <div class="en-banner">
+        <h2>ENDANGERED:</h2>
+        <p>A species considered to be facing a <b><em>very high</em></b> risk of extinction in the wild.</p>
+      </div>
+      <div class="vu-banner">
+        <h2>VULNERABLE:</h2>
+        <p>A species considered to be facing a <b><em>high</em></b> risk of extinction in the wild.</p>
+      </div>
+    </div>
+
+    <div class="world-maps">
+      <p>Below you can observe the intensity at which species are becoming endangered across the globe.
+        Each country is host to their own diverse array of flora and fauna, which themselves are declining at alarming
+        rates.
+        However, certain countries look after their biodiversity better than others, as shown below, by the differences
+        in endangerment across the world.</p>
+
+      <div class="mapandgraph">
+        <svg height=700 width=1600 style="border: 1px solid lightgrey; padding: 3px;" id="mapsvg" />
+
+        <div class="graphandlabel">
+          <svg height=625 width=500 style="border: 1px solid lightgrey; padding: 3px;" id="graphsvg" />
+          <div id="tool">
+          </div>
+        </div>
+      </div>
+
+
+      <div class='filters'>
+        <h2>Click on a minimap below to view world biodiversity filtered by species threat level.</h2>
+        <svg height=200 width=500 style="border: 1px solid lightgrey; padding: 3px;" id="TOTALsvg" />
+        <svg height=200 width=500 style="border: 1px solid lightgrey; padding: 3px;" id="CRENDANGEREDsvg" />
+        <svg height=200 width=500 style="border: 1px solid lightgrey; padding: 3px;" id="ENDANGEREDsvg" />
+        <svg height=200 width=500 style="border: 1px solid lightgrey; padding: 3px;" id="VULNERABLEsvg" />
+      </div>
+    </div>
+
+    <div class="barchart">
+      <p>Different species have been impacted to varying degrees by global climate change.
+        The increase in world temperature continues takes a toll on our planet's animal life, and hits certain animal
+        taxa harder than others.</p>
+      <h2>Click on the <em>Vulnerable</em>, <em>Endangered</em>, or <em>Critically Endangered</em> threat-levels,
+        to see how the rise in global temperature might influence the increase in threated species.</h2>
+      <div id="colorLegend"></div>
+      <svg height=800 width=2018 style="border: 1px solid lightgrey; padding: 3px;" id="stackedbarsvg" />
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const mapsvg = d3.select("#mapsvg")
+    const mapWidth = mapsvg.attr("width");
+    const mapHeight = mapsvg.attr("height");
+    const mapMargin = { top: 15, right: 15, bottom: 15, left: 15 };
+    const mapAreaWidth = mapWidth - mapMargin.left - mapMargin.right;
+    const mapAreaHeight = mapHeight - mapMargin.top - mapMargin.bottom;
+    const map = mapsvg.append("g")
+      .attr('id', 'map')
+      .raise();
+
+    const chartsvg = d3.select("#stackedbarsvg")
+    const chartWidth = chartsvg.attr("width");
+    const chartHeight = chartsvg.attr("height");
+    const chartMargin = { "top": 80, "right": 30, "bottom": 70, "left": 50 };
+    const chartAreaWidth = chartWidth - chartMargin.left - chartMargin.right;
+    const chartAreaHeight = chartHeight - chartMargin.top - chartMargin.bottom;
+    console.log(chartAreaHeight)
+
+    d3.csv('./threatenedSpecies.csv', d3.autoType)
+      .then((speciesData) => {
+
+        console.log(speciesData)
+
+        speciesData.forEach((d, i) => {
+          d['Amphibians'] = d['Amphibians'].toString().replaceAll(',', '')
+          d['Amphibians'] = Number(d['Amphibians']);
+          d['Birds'] = d['Birds'].toString().replaceAll(',', '')
+          d['Birds'] = Number(d['Birds']);
+          d['Fishes'] = d['Fishes'].toString().replaceAll(',', '')
+          d['Fishes'] = Number(d['Fishes']);
+          d['Mammals'] = d['Mammals'].toString().replaceAll(',', '')
+          d['Mammals'] = Number(d['Mammals']);
+          d['Reptiles'] = d['Reptiles'].toString().replaceAll(',', '')
+          d['Reptiles'] = Number(d['Reptiles']);
+          d['Molluscs'] = d['Molluscs'].toString().replaceAll(',', '')
+          d['Molluscs'] = Number(d['Molluscs']);
+          d['Other Invertebrates'] = d['Other Invertebrates'].toString().replaceAll(',', '')
+          d['Other Invertebrates'] = Number(d['Other Invertebrates']);
+          d['Total'] = d['Total'].toString().replaceAll(',', '')
+          d['Total'] = Number(d['Total']);
+        });
+
+        console.log(speciesData)
+        let animalData = {}
+
+        speciesData.forEach((d) => {
+          animalData[d.Country] = d
+        })
+
+        console.log(animalData)
+
+        // Load in world data geojson and second data set
+        const requestData = async () => {
+
+          // Organize chloropleth dataset
+
+          var endangermentData = await d3.csv('./redList.csv');
+
+          console.log(endangermentData)
+
+          endangermentData.forEach((d, i) => {
+            d['EXTINCT'] = d['EXTINCT'].toString().replaceAll(',', '')
+            d['EXTINCT'] = Number(d['EXTINCT']);
+            d['CRENDANGERED'] = d['CRENDANGERED'].toString().replaceAll(',', '')
+            d['CRENDANGERED'] = Number(d['CRENDANGERED']);
+            d['ENDANGERED'] = d['ENDANGERED'].toString().replaceAll(',', '')
+            d['ENDANGERED'] = Number(d['ENDANGERED']);
+            d['VULNERABLE'] = d['VULNERABLE'].toString().replaceAll(',', '')
+            d['VULNERABLE'] = Number(d['VULNERABLE']);
+            d['THREATENED'] = d['THREATENED'].toString().replaceAll(',', '')
+            d['THREATENED'] = Number(d['THREATENED']);
+            d['TOTAL'] = d['TOTAL'].toString().replaceAll(',', '')
+            d['TOTAL'] = Number(d['TOTAL']);
+          });
+
+          var world = await d3.json('./countries.geo.json')
+
+          // Draw minimaps
+
+          let totMiniMap = drawMiniMap("TOTAL", world)
+          let crMiniMap = drawMiniMap("CRENDANGERED", world)
+          let enMiniMap = drawMiniMap("ENDANGERED", world)
+          let vulMiniMap = drawMiniMap("VULNERABLE", world)
+
+          drawMap("TOTAL", world)
+
+          // Load stacked bar dataset
+
+          var dataByYear = await d3.csv('./redListYears.csv');
+
+          dataByYear.forEach((d) => {
+            d['Year'] = Number(d['Year'])
+          })
+
+          let dataRecent = dataByYear.filter((d) => { return d['Year'] > 2005 })
+
+          // organize data
+
+          let sBarData = { "CRENDANGERED": { 2006: {}, 2007: {}, 2008: {}, 2009: {}, 2010: {}, 2011: {}, 2012: {}, 2013: {}, 2014: {}, 2015: {}, 2016: {}, 2017: {}, 2018: {}, 2019: {}, 2020: {}, 2021: {} }, "ENDANGERED": { 2006: {}, 2007: {}, 2008: {}, 2009: {}, 2010: {}, 2011: {}, 2012: {}, 2013: {}, 2014: {}, 2015: {}, 2016: {}, 2017: {}, 2018: {}, 2019: {}, 2020: {}, 2021: {} }, "VULNERABLE": { 2006: {}, 2007: {}, 2008: {}, 2009: {}, 2010: {}, 2011: {}, 2012: {}, 2013: {}, 2014: {}, 2015: {}, 2016: {}, 2017: {}, 2018: {}, 2019: {}, 2020: {}, 2021: {} } }
+
+          dataRecent.forEach((d) => {
+            Object.keys(d).forEach((i) => {
+              if (i.slice(-2) == "CR") {
+                let to_add = Number(d[i].toString().replaceAll(',', ''))
+                sBarData["CRENDANGERED"][d["Year"]][i.substring(0, i.length - 3)] = to_add
+              } else if (i.slice(-2) == "EN") {
+                let to_add = Number(d[i].toString().replaceAll(',', ''))
+                sBarData["ENDANGERED"][d["Year"]][i.substring(0, i.length - 3)] = to_add
+              } else if (i.slice(-2) == "VU") {
+                let to_add = Number(d[i].toString().replaceAll(',', ''))
+                sBarData["VULNERABLE"][d["Year"]][i.substring(0, i.length - 3)] = to_add
+              }
+            })
+          })
+
+          console.log(sBarData)
+
+          // load temperature dataset
+
+          let tempData = await d3.csv("./temp.csv")
+          console.log(tempData)
+
+          function drawMap(extinctionType, world) {
+
+            d3.selectAll("#" + extinctionType + ".mmLabel").attr("font-weight", "bold")
+
+            // Get values based on speciesType, build color scale
+
+            let tTotals = {}
+            endangermentData.forEach((d) => {
+              tTotals[d.Name] = d[extinctionType]
+            })
+
+            console.log(tTotals)
+
+            let tTotalList = Object.values(tTotals)
+            console.log(tTotalList.length)
+
+            const colorScale = d3.scaleQuantile()
+              .domain(tTotalList)
+              .range(["#ffec19", "#ffc100", "#ff9800", "#ff5607", "#f6412d"]);
+
+            const darkerScale = d3.scaleQuantile()
+              .domain(tTotalList)
+              .range(["#e8d715", "#d09d00", "#c77700", "#bd3c00", "#c21603"]);
+
+
+            // Draw world map
+
+            var tip = d3.select("#tool").append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);
+
+            var countries = world.features;
+
+            var projection = d3.geoEquirectangular().fitSize([mapAreaWidth, mapAreaHeight], world);
+            var path = d3.geoPath().projection(projection);
+
+            map.selectAll("path.country").data(countries)
+              .join("path")
+              .attr("class", "country")
+              .attr("d", path)
+              .attr("id", d => d.properties.name)
+              .attr("stroke", "darkgrey")
+              .attr("stroke-width", ".7px")
+              .attr("fill", function (d) {
+                if (d.properties.name in tTotals) {
+                  return colorScale(tTotals[d.properties.name])
+                } else {
+                  return "lightgrey"
+                }
+              })
+              .attr("clicked", "false")
+              .on("click", function (event, d) {
+
+                // zooming
+                const [[x0, y0], [x1, y1]] = path.bounds(d);
+                if (d3.select(this).attr("clicked") == "false") {
+                  d3.select("svg#graphsvg").selectAll("*").remove()
+                  d3.select(this).style("stroke-width", "3px")
+                  d3.select(this).attr('clicked', 'true')
+                  map.transition().duration(750).call(
+                    plotZoom.transform,
+                    d3.zoomIdentity
+                      .translate(mapWidth / 2, mapHeight / 2)
+                      .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / mapWidth, (y1 - y0) / mapHeight)))
+                      .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                    d3.pointer(event, map.node())
+                  );
+                  horizontalBar(animalData[this.id])
+                } else {
+                  d3.select(this).attr("clicked", "false")
+                  d3.select(this).style("stroke-width", ".7px")
+                  const [[x0, y0], [x1, y1]] = path.bounds(world);
+                  map.transition().duration(750).call(
+                    plotZoom.transform,
+                    d3.zoomIdentity
+                      .translate(mapWidth / 2, mapHeight / 2)
+                      .scale(Math.min(8, 0.9 / Math.max((x1 - x0) / mapWidth, (y1 - y0) / mapHeight)))
+                      .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
+                    d3.pointer(event, map.node())
+                  )
+                  d3.select("#annotations").remove();
+                  d3.select("#bars").remove();
+                }
+
+              })
+              .on("mouseover", function (event, d) {
+                tip.html("Country: " + d.properties.name).style("opacity", 1).attr("id", "mouseText")
+                d3.select(event.currentTarget)
+                  .style("fill", function (d) {
+                    if (d.properties.name in tTotals) {
+                      return darkerScale(tTotals[d.properties.name])
+                    } else {
+                      return "lightgrey"
+                    }
+                  });
+              })
+              .on("mouseout", function () {
+                tip.html("")
+                // label.attr("display", "none")
+                // tip.style("opacity", 0)
+                d3.select(event.currentTarget)
+                  .style("fill", function (d) {
+                    if (d.properties.name in tTotals) {
+                      return colorScale(tTotals[d.properties.name])
+                    } else {
+                      return "lightgrey"
+                    }
+                  });
+              })
+
+            // enable zooming
+
+            let zoomExtent = [[0, 0], [Number(mapWidth), Number(mapHeight)]];
+            let translateExtent = [[-100, -100], [Number(mapWidth) + 100, Number(mapHeight) + 100]];
+            var plotZoom = d3.zoom()
+              .extent(zoomExtent)
+              .translateExtent(translateExtent)
+              .scaleExtent([1, 10])
+              .on("zoom", plotZoomed);
+
+            map.call(plotZoom);
+
+            function plotZoomed({ transform }) {
+              map.attr("transform", transform);
+            }
+
+            // build hover label
+
+            // var hovLab = map.append("div")
+            //                 .attr("id", "hov-lab").raise()
+
+            function hoverLabel(event, d) {
+
+              // console.log(d)
+
+              let mouseLocation = [event.clientX, event.clientY]
+
+              hovLab.select('p').remove()
+
+              hovLab.attr('display', 'block')
+                .style("left", mouseLocation[0] + "px")
+                .style("top", mouseLocation[1] + 20 + "px")
+
+              hovLab.append("p").text("Country: " + d.properties.name)
+
+            }
+
+            function removeHoverLabel(event, d) {
+              hovLab.style("display", "none")
+            }
+
+          }
+
+          function horizontalBar(hBarData) {
+
+            const hBarSvg = d3.select("#graphsvg")
+            const hBarWidth = hBarSvg.attr("width");
+            const hBarHeight = hBarSvg.attr("height");
+            const hBarMargin = { top: 50, right: 10, bottom: 70, left: 50 };
+
+            const hBarChartWidth = hBarWidth - hBarMargin.left - hBarMargin.right;
+            const hBarChartHeight = hBarHeight - hBarMargin.top - hBarMargin.bottom;
+
+            let hBarAnnotations = hBarSvg.append("g").attr("id", "annotations");
+
+            let hBarChartArea = hBarSvg.append("g").attr("id", "bars")
+              .attr("transform", "translate(" + hBarMargin.left + "," + hBarMargin.top + ")");
+
+            let loopData = hBarData
+
+            delete (loopData['Total'])
+
+            let barVals = []
+            console.log(hBarData)
+            Object.values(loopData).forEach((d) => {
+              if (typeof (d) === "number") {
+                barVals.push(d)
+              }
+
+            })
+
+            // Vertical scale and axis
+            const barExtent = d3.extent(barVals)
+            console.log(barExtent)
+            const barScale = d3.scaleLinear().domain(barExtent).range([hBarChartHeight, 0])
+
+            let hBarLeftAxis = d3.axisLeft(barScale)
+              .tickFormat(d3.format("~f"));
+            let hBarLeftGridlines = d3.axisBottom(barScale)
+              .tickSize(-hBarChartWidth - 10)
+              .tickFormat("")
+            hBarAnnotations.append("g")
+              .attr("class", "y axis")
+              .attr("transform", `translate(${hBarMargin.left - 10},${hBarMargin.top})`)
+              .call(hBarLeftAxis);
+
+            // Vertical scale and axis
+            const speciesTypes = ["Mammals", "Birds", "Reptiles", "Amphibians", "Fishes", "Molluscs", "Other Invertebrates"]
+            const placementScale = d3.scaleBand().domain(speciesTypes).range([0, hBarChartWidth])
+
+
+            let hBarBottomAxis = d3.axisBottom(placementScale)
+            let hBarBottomGridlines = d3.axisBottom(placementScale)
+              .tickSize(-hBarChartHeight - 10)
+
+
+            hBarAnnotations.append("g")
+              .attr("class", "x axis")
+              .attr("transform", `translate(${hBarMargin.left},${hBarChartHeight + hBarMargin.top + 10})`)
+              .call(hBarBottomAxis)
+              .selectAll("text")
+              .attr("y", 8)
+              .attr("x", 8)
+              .attr("font-size", "12px")
+              .attr("dy", ".35em")
+              .attr("transform", "rotate(60)")
+              .style("text-anchor", "start");
+
+            hBarAnnotations.append('text')
+              .attr("class", "y label")
+              .style("transform", "translate(10px, 300px) rotate(270deg)")
+              .style("font-size", "12px")
+              .text("Number of Species");
+
+            hBarAnnotations.append('text')
+              .attr("class", "y label")
+              .style("transform", "translate(100px,30px) ")
+              .style("font-size", "16px")
+              .text('Species Threatened per Country');
+
+            delete (loopData['Country'])
+
+            const hBarSpecies = ['Amphibians', 'Birds', 'Fishes', 'Mammals', 'Molluscs', 'Other Invertebrates', 'Reptiles']
+            const hBarSpeciesColors = ['#2a5082', '#bdd09f', '#397ca2', '#885010', '#404f24', '#c9ad95', '#619924']
+
+
+
+            const hBarColorScale = d3.scaleOrdinal().domain(hBarSpecies).range(hBarSpeciesColors)
+
+            Object.keys(loopData).forEach((d) => {
+              console.log(d)
+              let bar = hBarChartArea.append("rect")
+                .attr("y", barScale(loopData[d]))
+                .attr("x", placementScale(d) + 25)
+                .attr("width", 20)
+                .attr("height", hBarChartHeight - barScale(loopData[d]))
+                .attr("stroke", "none")
+                .attr("fill", hBarColorScale(d))
+                .attr("opacity", .7)
+                .attr('id', d + "hbar")
+                .on("mouseover", function () {
+                  let t = d3.select(this)
+                  t.attr("opacity", 1)
+                })
+                .on("mouseout", function () {
+                  let t = d3.select(this)
+                  t.attr("opacity", .7)
+                })
+                .on('click', function () {
+                  let x = d3.select(this)
+                  if (x.attr("stroke") == "none" && d3.select("path#" + d).style("opacity", .6)) {
+                    x.attr("stroke", "black")
+                    x.attr("stroke-width", "5")
+                    d3.select("path#" + d).style("opacity", 1)
+                  } else {
+                    x.attr("stroke", "none")
+                    d3.select("path#" + d).style("opacity", .6)
+                  }
+
+                })
+            })
+
+          }
+
+          function drawMiniMap(eType, mapData) {
+
+            const miniMapsvg = d3.select("#" + eType + 'svg')
+            const miniMapWidth = miniMapsvg.attr("width");
+            const miniMapHeight = miniMapsvg.attr("height");
+            const miniMapMargin = { top: 2, right: 2, bottom: 5, left: 2 };
+            const miniMapAreaWidth = miniMapWidth - miniMapMargin.left - miniMapMargin.right;
+            const miniMapAreaHeight = miniMapHeight - miniMapMargin.top - miniMapMargin.bottom;
+            const miniMap = miniMapsvg.append("g")
+              .attr('id', eType + 'miniMap')
+              .raise();
+
+            miniMapsvg.append('text').text(eType)
+              .attr("transform", "translate(3, 180)")
+              .attr("font-size", "20px")
+              .attr("id", eType)
+              .attr("class", "mmLabel")
+
+            var countries = mapData.features;
+            // console.log(countries)
+
+            var projection = d3.geoEquirectangular().fitSize([miniMapAreaWidth, miniMapAreaHeight], mapData);
+            var path = d3.geoPath().projection(projection);
+
+            let tTotals = {}
+
+            endangermentData.forEach((d) => {
+              tTotals[d.Name] = d[eType]
+            })
+
+            // console.log(tTotals)
+
+            let tTotalList = Object.values(tTotals)
+            // console.log(tTotalList)
+
+            const colorScale = d3.scaleQuantile()
+              .domain(tTotalList)
+              .range(["#ffec19", "#ffc100", "#ff9800", "#ff5607", "#f6412d"]);
+
+            miniMap.selectAll("path." + eType + "country").data(countries)
+              .join("path")
+              .attr("class", eType + "country")
+              .attr("d", path)
+              .attr("id", d => d.properties.name)
+              .attr("stroke", "darkgrey")
+              .attr("stroke-width", ".2px")
+              .attr("fill", function (d) {
+
+                if (d.properties.name in tTotals) {
+                  return colorScale(tTotals[d.properties.name])
+                } else {
+                  return "lightgrey"
+                }
+              })
+
+            miniMapsvg.on("click", function () {
+              d3.selectAll(".mmLabel").attr("font-weight", "normal")
+              drawMap(eType, world)
+              d3.select("#" + eType).attr('font-weight', 'bold')
+              buildStackedBar(eType)
+              d3.select(".tooltip").remove()
+              d3.select("svg#graphsvg").selectAll("*").remove()
+
+            })
+
+            return miniMapsvg
+
+          }
+
+          function buildStackedBar(endangermentType) {
+
+
+            console.log(d3.select("g#chart"))
+            if (endangermentType == "TOTAL") {
+              chartsvg.selectAll("*").remove()
+            } else {
+              const chart = chartsvg.append("g")
+                .attr('id', 'chart')
+                .raise();
+
+              const lineGraph = chartsvg.append("g")
+                .attr('id', 'lineGraph')
+                .raise();
+
+              d3.select("g#chart_annotations").remove()
+              d3.select("g#chart_points").remove()
+              d3.select("circle.t").remove()
+              d3.select("path.line").remove()
+
+              let chartAnnotations = chart.append("g").attr("id", "chart_annotations");
+              let stackedBar = chart.append("g").attr("id", "chart_points")
+                .attr("transform", "translate(25," + chartMargin.top + ")");
+
+              let lineChart = lineGraph.append("g").attr("id", "line_points")
+                .attr("transform", "translate(0," + chartMargin.top + ")");
+
+              let data = sBarData[endangermentType]
+              console.log(data)
+
+              let values = []
+              Object.values(data).forEach(d => {
+                let sum = 0
+                Object.keys(d).forEach(an => {
+                  if (an != "TOTAL") {
+                    sum += d[an]
+                  }
+                })
+                values.push(sum)
+              })
+              console.log(values)
+
+              const numExtent = d3.extent(values)
+              console.log(numExtent)
+              console.log(chartAreaHeight)
+              const numScale = d3.scaleLinear().domain([0, numExtent[1]]).range([chartAreaHeight, 10]);
+              let leftAxis = d3.axisLeft(numScale).tickFormat(d3.format('~f'));
+
+              console.log(numScale(0))
+              console.log(numScale(1139))
+
+              chartAnnotations.append("g")
+                .attr("class", "y axis")
+                .attr("transform", `translate( 100 ,${chartMargin.top})`)
+                .call(leftAxis)
+
+              chartAnnotations.append('text')
+                .attr("class", "y label")
+                .style("transform", "translate(50px, 500px) rotate(270deg)")
+                .style("font-size", "20px")
+                .text("Number of Species");
+
+              chartAnnotations.append('text')
+                .attr("class", "y2 label")
+                .style("transform", "translate(1975px, 250px) rotate(90deg)")
+                .style("font-size", "20px")
+                .text("Global Temperature Rise (°C)");
+
+              chartAnnotations.append('text')
+                .attr("class", "x label")
+                .style("transform", "translate(1000px, 790px)")
+                .style("font-size", "20px")
+                .text("Year");
+
+              chartAnnotations.append('text')
+                .attr("class", "stacked-title")
+                .style("transform", "translate(600px, 40px)")
+                .style("font-size", "32px")
+                .text("Threat to Species and Global Temperature Over Time");
+
+              let anomolies = []
+              tempData.forEach((d) => {
+                anomolies.push(d['Avg'])
+              })
+              console.log(anomolies)
+
+
+              const tempExtent = d3.extent(anomolies)
+              const tempScale = d3.scaleLinear().domain(tempExtent).range([chartAreaHeight, 10]);
+              let rightAxis = d3.axisRight(tempScale).tickFormat(d3.format('~f'));
+
+              chartAnnotations.append("g")
+                .attr("class", "r axis")
+                .attr("transform", `translate(${chartAreaWidth + chartMargin.left - chartMargin.right * 2},${chartMargin.top})`)
+                .call(rightAxis)
+
+              // chartAnnotations.append('text')
+              //                   .attr("class", "r label")
+              //                   .style("transform", "translate(2000px, 300px) rotate(90deg)")
+              //                   .style("font-size", "12px")
+              //                   .text("Change in Temp");
+
+
+              const years = ["2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021"]
+              const yearScale = d3.scaleBand().domain(years).range([5, chartAreaWidth - chartMargin.right])
+                .padding(0.05);
+
+              let bottomAxis = d3.axisBottom(yearScale)
+              chartAnnotations.append("g")
+                .attr("class", "x axis")
+                .attr("transform", `translate(${chartMargin.left},${chartAreaHeight + chartMargin.top + 10})`)
+                .call(bottomAxis)
+                .selectAll("text")
+                .attr("y", 8)
+                .attr("x", 8)
+                .attr("dy", ".35em")
+                .attr("transform", "rotate(60)")
+                .style("text-anchor", "start");
+
+
+              const barScale = d3.scaleLinear().domain([0, 17]).range([chartMargin.left + 45, chartAreaWidth * 1.1])
+              const species = ['Amphibians', 'Birds', 'Fishes', 'Mammals', 'Molluscs', 'Other Invertebrates', 'Reptiles']
+              const speciesColors = ['#2a5082', '#bdd09f', '#397ca2', '#885010', '#404f24', '#c9ad95', '#619924']
+
+              d3.select("div#colorLegend").selectAll("*").remove()
+              let colorLegend = d3.select("div#colorLegend")
+
+              speciesColors.forEach((color, pos) => {
+                colorLegend.append("text").text(species[pos]).style("color", color)
+              })
+
+
+              let lineData = { 'Amphibians': [], 'Birds': [], 'Fishes': [], 'Mammals': [], 'Molluscs': [], 'Other Invertebrates': [], 'Reptiles': [] }
+
+              // let stacker = d3.stack().keys(Object.keys(data['2006']))
+              // let stacked = stacker(data)
+              console.log(data['2006'])
+
+              Object.keys(data).forEach((d, i) => {
+                var newHeight = 0
+                species.forEach((spec, spot) => {
+                  lineData[spec].push([barScale(i), numScale(newHeight + data[d][spec]), numScale(newHeight)])
+                  newHeight = newHeight + data[d][spec]
+                })
+              })
+
+
+              console.log(lineData)
+
+              Object.keys(lineData).forEach((species, number) => {
+
+                var beneath = d3.area()
+                  .x(d => d[0])
+                  .y0(d => d[1])
+                  .y1(d => d[2]);
+
+                console.log(beneath)
+
+                stackedBar.append("path")
+                  .datum(lineData[species])
+                  .attr("class", "line")
+                  .attr("d", beneath)
+                  .style("fill", speciesColors[number])
+                  .style("opacity", .6)
+                  .attr("id", species)
+
+              })
+
+              console.log(yearScale("2006"))
+
+              const dotScale = d3.scaleLinear().domain([2006, 2021]).range([chartMargin.left + 70, chartAreaWidth - 18.5])
+
+              var thediv = d3.select("body").append("div")
+                .attr("class", "thetooltip")
+                .style("opacity", 0).raise();
+
+              let xLocations = [];
+              let xLocs = [];
+              let yLocations = [];
+              let yearVal = [];
+              let tempVals = [];
+
+              lineChart.selectAll("circle.t").data(tempData)
+                .join("circle")
+                .attr("class", "t")
+                .attr("cx", function (d) {
+                  xLocations.push(Math.round(dotScale(d['Year'])))
+                  xLocs.push(dotScale(d['Year']))
+                  yLocations.push(tempScale(d['Avg']))
+                  for (let i = Math.round(dotScale(d['Year'])) - 25; i <= Math.round(dotScale(d['Year'])) + 25; i++) {
+                    xLocations.push(i)
+                    xLocs.push(dotScale(d['Year']))
+                    yLocations.push(tempScale(d['Avg']))
+                    yearVal.push(d['Year'])
+                    tempVals.push(d['Avg'])
+                  }
+                  return dotScale(d['Year'])
+                })
+                .attr("cy", d => tempScale(d['Avg']))
+                .attr("r", 8)
+                .attr("fill", "#db0000")
+                .attr("id", d => d['Year'])
+                .on("mouseover", function (event) {
+                  let x = d3.select(this)
+                  thediv.transition()
+                    .duration(100)
+                    .style("opacity", 1);
+
+                  let themouseLocation = [event.clientX, event.clientY]
+
+                  thediv.html(d3.format(".2f")(this.cx.animVal.value))
+                    .style("left", themouseLocation[0] + "px")
+                    .style("top", themouseLocation[1] + 20 + "px")
+
+                  console.log(this.cx.animVal.value)
+                  // let popUp = lineGraph.append("rect")
+                  //                     .attr("x", this.cx.animVal.value+20)
+                  //                     .attr("width", 20)
+                  //                     .attr("y", this.cy.animVal.value-20)
+                  //                     .attr("height", 20)
+                  //                     .attr("fill", "none")
+                  //                     .attr("stroke", "black")
+
+
+                })
+
+
+              console.log(xLocations)
+              console.log(xLocs)
+              console.log(yLocations)
+              var connect = d3.line()
+                .x(d => dotScale(d["Year"]))
+                .y(d => tempScale(d["Avg"]))
+                .curve(d3.curveMonotoneX)
+
+              lineChart.append("path")
+                .datum(tempData)
+                .attr("class", "line")
+                .attr("d", connect)
+                .style("fill", "none")
+                .style("stroke", "#db0000")
+                .style("stroke-width", "4");
+
+
+              // Add marker lines, circles, and label to use in our mouseovers
+              let mouseGroup = lineChart.append("g");
+              let xMarker = mouseGroup.append("line")
+                .attr("id", "xMarker")
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-width", 1)
+                .attr("y1", 0)
+                .attr("y2", chartAreaHeight)
+                .attr("x1", 0)
+                .attr("x2", 0)
+                .attr("visibility", "hidden");
+
+              let valueMarker = mouseGroup.append("circle")
+                .attr("id", "valueMarker")
+                .attr("fill", "none")
+                .attr("stroke", "black")
+                .attr("stroke-width", 2)
+                .attr("r", 10)
+                .attr("visibility", "hidden");
+
+              let label = mouseGroup.append("text")
+                .attr("id", "label")
+                .attr("visibility", "hidden");
+
+
+
+              let activeRegion = mouseGroup.append("rect")
+                .attr("id", "activeRegion")
+                .attr("width", chartAreaWidth)
+                .attr("height", chartAreaHeight)
+                .attr("fill", "none")
+                .attr("pointer-events", "all")
+              // .attr("transform","translate("+chartMargin.left+", 0)");
+
+              // activeRegion.on("mousemove", function(evt) {
+              //   console.log(evt);
+              //   let location = d3.pointer(evt);
+              //   console.log(location);
+              //   valueMarker.attr("visibility", "")
+              //              .attr("cx",location[0])
+              //              .attr("cy",location[1]);
+              // });
+
+              //let findDate = d3.bisector( d => d.Year ).right;
+
+              activeRegion.on("mouseover", function () {
+                xMarker.attr("visibility", "");
+                // valueMarker.attr("visibility","");
+                label.attr("visibility", "");
+              });
+              activeRegion.on("mouseout", function () {
+                xMarker.attr("visibility", "hidden");
+                valueMarker.attr("visibility", "hidden");
+                label.attr("visibility", "hidden");
+              });
+              activeRegion.on("mousemove", function (evt) {
+
+                let location = d3.pointer(evt);
+                // console.log(location)
+                let x = location[0];
+                console.log(x)
+                let xDate = dotScale.invert(x);
+                // console.log(xDate)
+                let y = location[1];
+                // console.log(y)
+                let yDate = tempScale.invert(y);
+                // console.log(yDate)
+
+                if (x <= 99) {
+                  xMarker.attr("visibility", "hidden");
+                } else {
+                  xMarker.attr("visibility", "");
+                }
+
+
+                //let index = findDate(lineData, xDate);
+                //let d = lineData[index];
+
+
+                // let xPos =  dotScale(d => d.Year);
+                // let yPos = tempScale(d => d.Avg);
+                //
+                //
+
+                let checkVal = Math.round(x)
+                console.log(checkVal)
+                if (xLocations.includes(checkVal)) {
+                  console.log("in")
+                  let dotNumber = xLocations.indexOf(checkVal);
+                  let yDot = yLocations[dotNumber]
+                  let xDot = xLocs[dotNumber]
+                  let yearDot = yearVal[dotNumber]
+                  let tempDot = d3.format("(.2f")(tempVals[dotNumber])
+                  valueMarker.attr("visibility", "");
+                  label.attr("visibility", "");
+                  valueMarker.attr("cx", xDot).attr("cy", yDot);
+                  label.text(yearDot + ": " + tempDot + "°C rise").attr("transform", `translate(${xDot + 15},${yDot - 15})`)
+                } else {
+                  valueMarker.attr("visibility", "hidden");
+                  label.attr("visibility", "hidden");
+                }
+                xMarker.attr("x1", x).attr("x2", x);
+
+
+
+                // let txt = d["Avg"]
+                //
+                // label.text(txt);
+                //   if (xPos < chartAreaWidth / 2.0) {
+                //     label.attr("x",xPos+4).attr("y",100).attr("text-anchor","start");
+                //   }
+                //   else {
+                //     label.attr("x",xPos-4).attr("y",chartAreaHeight-100).attr("text-anchor","end");
+                //   }
+                //
+                //
+              });
+
+
+            }
+          }
+
+        }
+        requestData()
+      })
+
+
+// add labels to stream graph for each taxa
+// CRNDANGERED
+// fix spacing
+
+
+  </script>
+
+</body>
+
+</html>

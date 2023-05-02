@@ -1,0 +1,251 @@
+Name,EXTINCT,CRENDANGERED,ENDANGERED,VULNERABLE,THREATENED,TOTAL
+Antarctica,0,0,1,7,5,210
+Bouvet Island,0,0,0,2,0,99
+French Southern Territories,1,5,11,16,8,"1,081"
+Heard Island and McDonald Islands,0,0,4,9,1,147
+South Georgia and the South Sandwich Islands,0,0,4,5,5,223
+Anguilla,1,9,19,40,19,"1,304"
+Antigua and Barbuda,3,12,19,42,24,"1,421"
+Aruba,0,7,16,34,22,"1,224"
+Bahamas,2,14,31,55,37,"1,962"
+Barbados,1,13,19,40,26,"1,429"
+Bermuda,5,31,15,30,21,"1,096"
+"Bonaire, Sint Eustatius and Saba",1,11,16,47,25,"1,418"
+Cayman Islands,1,12,25,34,30,"1,339"
+Cuba,7,38,89,82,68,"2,226"
+Curaçao,0,10,19,39,22,"1,312"
+Dominica,1,11,22,42,30,"1,465"
+Dominican Republic,8,34,72,74,61,"1,804"
+Grenada,0,11,18,43,24,"1,426"
+Guadeloupe,7,17,25,47,33,"1,428"
+Haiti,9,73,63,74,53,"1,762"
+Jamaica,3,25,49,55,41,"1,602"
+Martinique,6,11,20,33,25,"1,340"
+Montserrat,0,9,17,41,23,"1,295"
+Puerto Rico,5,19,31,43,38,"1,709"
+Saint Barthélemy,0,6,14,30,13,918
+Saint Kitts and Nevis,1,10,16,42,24,"1,358"
+Saint Lucia,3,10,26,40,26,"1,414"
+Saint Martin (French part),0,9,16,40,17,"1,190"
+Saint Vincent and the Grenadines,1,9,21,43,26,"1,447"
+Sint Maarten (Dutch part),0,9,16,40,15,"1,158"
+Trinidad and Tobago,0,15,23,54,38,"2,176"
+Turks and Caicos Islands,0,7,19,43,26,"1,329"
+"Virgin Islands, British",0,14,21,43,25,"1,442"
+"Virgin Islands, U.S.",1,11,22,35,25,"1,417"
+China,4,118,205,337,257,"6,508"
+Hong Kong,0,13,25,42,31,"1,201"
+Japan,14,58,175,283,282,"4,819"
+"Korea, Democratic People's Republic of",1,9,29,58,38,954
+"Korea, Republic of",1,15,42,72,55,"1,591"
+Macao,0,5,10,11,4,489
+Mongolia,0,5,10,24,29,636
+"Taiwan, Province of China",0,28,77,229,221,"3,972"
+Åland Islands,0,0,0,0,0,24
+Albania,1,23,51,77,85,"1,376"
+Andorra,0,0,4,10,22,366
+Austria,3,25,59,52,91,"1,207"
+Belgium,1,6,10,36,52,897
+Bosnia and Herzegovina,0,13,45,66,67,"1,232"
+Bulgaria,0,17,30,74,87,"1,270"
+Croatia,1,37,55,111,98,"1,680"
+Czechia,0,4,26,32,59,915
+Denmark,0,7,7,44,45,859
+Estonia,0,2,4,20,28,597
+Faroe Islands,1,5,5,19,16,373
+Finland,0,5,5,24,43,663
+France,8,37,113,186,176,"2,836"
+Germany,4,18,61,68,93,"1,335"
+Gibraltar,0,9,10,39,21,654
+Greece,4,87,158,260,161,"2,522"
+Greenland,1,2,5,20,7,272
+Guernsey,0,1,1,12,3,229
+Holy See (Vatican City State),0,0,0,2,3,30
+Hungary,0,7,26,43,58,916
+Iceland,1,5,7,22,19,439
+Ireland,1,11,10,41,37,964
+Isle of Man,0,1,2,4,3,95
+Italy,3,54,140,194,213,"2,558"
+Jersey,0,1,1,13,2,237
+Latvia,0,2,6,27,39,666
+Liechtenstein,0,0,3,7,25,460
+Lithuania,0,2,4,21,35,637
+Luxembourg,0,2,3,7,21,517
+Malta,0,12,12,38,24,702
+Monaco,0,10,8,26,13,477
+Montenegro,1,22,64,67,86,"1,364"
+Netherlands,1,8,6,39,53,940
+North Macedonia,2,20,45,70,59,"1,005"
+Norway,0,9,12,45,51,851
+Poland,1,3,24,38,58,960
+Portugal,6,114,116,153,152,"2,588"
+Romania,2,20,50,76,77,"1,281"
+San Marino,0,1,0,4,5,77
+Serbia,0,12,38,55,64,"1,082"
+Slovakia,0,6,23,37,63,944
+Slovenia,0,16,44,114,58,"1,449"
+Spain,2,87,182,249,284,"3,523"
+Svalbard and Jan Mayen,0,0,1,10,6,96
+Sweden,0,6,9,40,58,873
+Switzerland,6,6,45,56,79,"1,100"
+United Kingdom,2,14,20,64,60,"1,253"
+Belize,1,11,34,63,54,"2,363"
+Costa Rica,4,41,92,159,104,"4,137"
+El Salvador,0,9,26,58,46,"1,853"
+Guatemala,3,48,97,133,82,"3,394"
+Honduras,4,68,84,115,84,"3,599"
+Mexico,20,211,354,372,239,"6,860"
+Nicaragua,1,27,38,101,77,"3,399"
+Panama,2,56,93,132,118,"4,318"
+Algeria,2,22,43,82,51,"1,303"
+Egypt,1,20,41,133,127,"2,330"
+Libya,0,16,20,49,27,902
+Morocco,2,36,66,105,74,"1,945"
+Tunisia,11,21,28,65,46,"1,148"
+Western Sahara,0,13,24,47,33,"1,176"
+Canada,9,18,31,88,74,"2,247"
+Saint Pierre and Miquelon,0,2,5,16,14,438
+United States,231,239,313,574,341,"8,149"
+Belarus,0,3,3,23,36,565
+Moldova,1,6,5,23,31,521
+Russian Federation,3,30,52,121,126,"2,394"
+Ukraine,2,12,32,59,68,"1,170"
+American Samoa,1,3,21,79,79,"1,507"
+Australia,41,146,275,628,445,"8,223"
+Christmas Island,4,3,16,31,27,"1,061"
+Cocos (Keeling) Islands,0,1,13,34,24,951
+Cook Islands,15,1,16,52,50,"1,210"
+Fiji,1,28,57,172,160,"2,407"
+French Polynesia,59,43,27,70,58,"1,683"
+Guam,5,8,26,72,94,"1,553"
+Kiribati,1,0,18,97,115,"1,591"
+Marshall Islands,0,1,15,93,117,"1,629"
+"Micronesia, Federated States of",2,7,30,141,145,"2,124"
+Nauru,0,1,11,80,108,"1,278"
+New Caledonia,5,44,69,164,156,"2,858"
+New Zealand,23,46,80,116,65,"1,624"
+Niue,0,1,14,45,51,"1,036"
+Norfolk Island,8,2,12,36,25,749
+Northern Mariana Islands,2,7,24,72,94,"1,582"
+Palau,1,28,35,129,145,"2,374"
+Papua New Guinea,1,64,93,310,285,"5,482"
+Pitcairn,0,1,8,28,22,614
+Samoa,2,4,20,77,81,"1,627"
+Solomon Islands,2,16,40,192,198,"2,867"
+Tokelau,0,1,12,47,55,"1,057"
+Tonga,2,13,24,71,67,"1,683"
+Tuvalu,0,2,15,88,110,"1,365"
+United States Minor Outlying Islands,1,4,9,63,73,"1,449"
+Vanuatu,1,2,24,115,132,"2,220"
+Wallis and Futuna,0,2,13,79,91,"1,450"
+Bangladesh,0,37,66,83,84,"2,068"
+Bhutan,0,8,19,37,47,890
+British Indian Ocean Territory,0,3,15,79,103,"1,313"
+Brunei Darussalam,0,14,52,98,128,"2,032"
+Cambodia,0,41,73,168,176,"2,880"
+Disputed Territory,0,1,6,14,5,"1,174"
+India,0,114,272,415,352,"6,662"
+Indonesia,3,192,361,672,663,"10,008"
+Lao People's Democratic Republic,1,42,59,103,99,"2,110"
+Malaysia,1,105,193,449,442,"6,003"
+Maldives,0,6,25,60,93,"1,615"
+Myanmar,0,44,98,185,267,"4,357"
+Nepal,0,15,30,56,75,"1,584"
+Philippines,15,62,207,423,353,"5,473"
+Singapore,1,22,56,215,229,"2,614"
+Sri Lanka,18,122,205,194,179,"3,009"
+Thailand,2,66,137,349,368,"5,552"
+Timor-Leste,0,8,18,24,39,"1,622"
+Viet Nam,1,91,193,302,258,"5,034"
+Argentina,3,40,73,118,125,"2,902"
+"Bolivia, Plurinational States of",0,34,32,89,100,"2,842"
+Brazil,11,135,223,332,258,"7,208"
+Chile,1,24,62,82,82,"1,765"
+Colombia,1,123,241,379,273,"7,184"
+Ecuador,8,114,168,298,211,"4,886"
+Falkland Islands (Malvinas),1,0,8,11,10,328
+French Guiana,0,13,23,49,38,"2,425"
+Guyana,0,12,36,64,49,"2,725"
+Paraguay,0,6,12,35,61,"1,359"
+Peru,1,56,155,212,207,"5,244"
+Suriname,0,10,23,49,45,"2,539"
+Uruguay,2,22,37,58,50,"1,269"
+"Venezuela, Bolivarian Republic of",1,68,134,183,168,"4,969"
+Angola,0,24,52,85,64,"3,366"
+Benin,0,26,34,56,51,"2,175"
+Botswana,0,4,11,17,24,"1,397"
+Burkina Faso,0,8,13,13,18,991
+Burundi,0,6,20,33,36,"1,292"
+Cabo Verde,1,12,23,43,29,"1,118"
+Cameroon,0,81,132,126,84,"3,578"
+Central African Republic,0,10,15,25,28,"1,724"
+Chad,0,11,14,23,21,"1,027"
+Comoros,0,7,31,91,114,"1,698"
+Congo,0,19,31,74,51,"2,513"
+"Congo, The Democratic Republic of the",0,40,97,163,102,"4,868"
+Côte d'Ivoire,0,29,56,90,83,"2,631"
+Djibouti,0,11,22,91,119,"1,863"
+Equatorial Guinea,0,22,43,63,46,"1,965"
+Eritrea,0,17,34,101,132,"2,101"
+Eswatini,0,4,10,19,21,"1,156"
+Ethiopia,0,18,45,61,43,"1,889"
+Gabon,0,19,44,74,54,"2,600"
+Gambia,0,25,32,62,47,"1,933"
+Ghana,0,39,42,84,78,"2,707"
+Guinea,0,29,64,108,74,"2,634"
+Guinea-Bissau,0,23,31,58,45,"1,887"
+Kenya,2,58,78,164,177,"4,449"
+Lesotho,0,0,7,9,19,520
+Liberia,0,31,48,77,68,"2,266"
+Madagascar,13,156,364,347,318,"4,159"
+Malawi,1,28,28,35,65,"2,018"
+Mali,0,7,14,23,22,"1,147"
+Mauritania,0,23,34,73,48,"1,794"
+Mauritius,45,18,49,122,113,"2,008"
+Mayotte,5,2,18,86,112,"1,504"
+Mozambique,1,25,66,152,184,"4,312"
+Namibia,1,14,35,56,50,"2,371"
+Niger,0,7,13,19,20,881
+Nigeria,0,40,71,92,75,"3,145"
+Réunion,21,11,28,96,100,"1,676"
+Rwanda,1,11,20,31,30,"1,270"
+"Saint Helena, Ascension and Tristan da Cunha",29,46,57,39,15,853
+Sao Tome and Principe,0,10,24,34,17,948
+Senegal,0,28,51,80,61,"2,382"
+Seychelles,20,88,159,153,123,"2,313"
+Sierra Leone,0,28,45,80,71,"2,343"
+Somalia,0,16,36,111,141,"3,021"
+South Africa,6,86,184,210,203,"5,111"
+South Sudan,0,7,16,24,20,"1,372"
+Sudan,0,19,32,101,125,"2,709"
+"Tanzania, United Republic of",2,129,167,267,228,"5,502"
+Togo,0,29,29,55,49,"2,167"
+Uganda,0,49,44,76,57,"2,490"
+Zambia,0,10,27,40,42,"2,335"
+Zimbabwe,0,9,17,28,32,"1,835"
+Afghanistan,0,4,10,27,30,745
+Armenia,0,8,7,26,38,580
+Azerbaijan,0,13,10,31,41,737
+Bahrain,0,11,15,37,53,803
+Cyprus,0,14,28,39,34,851
+Georgia,0,7,10,38,46,739
+"Iran, Islamic Republic of",0,26,46,102,100,"2,213"
+Iraq,0,13,20,62,69,"1,192"
+Israel,4,28,49,129,132,"2,151"
+Jordan,0,5,26,92,114,"1,638"
+Kazakhstan,1,15,19,44,37,958
+Kuwait,1,9,18,45,55,939
+Kyrgyzstan,0,1,12,25,26,555
+Lebanon,0,13,29,50,38,948
+Oman,0,14,41,80,92,"2,004"
+Pakistan,0,26,62,113,105,"2,218"
+"Palestine, State of",0,5,16,23,22,471
+Qatar,0,12,16,43,53,832
+Saudi Arabia,1,14,39,111,136,"2,135"
+Syrian Arab Republic,1,22,39,67,47,"1,157"
+Tajikistan,0,3,11,24,22,563
+Turkey,4,73,111,126,102,"1,944"
+Turkmenistan,0,11,14,30,30,732
+United Arab Emirates,0,13,30,50,56,"1,317"
+Uzbekistan,0,9,12,28,29,632
+Yemen,2,12,38,122,150,"2,515"
