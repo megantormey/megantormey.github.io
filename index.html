@@ -1,89 +1,293 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="UTF-8">
-  <title>Megan Tormey Portfolio</title>
 
-  <link rel="stylesheet" type="text/css" href="styles/site.css" media="all" />
+  <title>Portfolio - Megan Tormey</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
 
+  <style>
+    /* Set the height of the whole page */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Garamond';
+      background-color: rgb(240, 248, 255);
+      color: rgb(11, 48, 81)
+    }
+
+    /* Start screen height */
+    .startscreen {
+      height: 100vh;
+    }
+
+    /* Style the navbar */
+    .header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      margin-right: 20px;
+    }
+
+    li {
+      display: inline;
+      margin-left: 40px;
+    }
+
+    /* Style the links in the navbar */
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    nav ul li {
+      display: inline-block;
+      margin: 0 10px;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 48px;
+    }
+
+    h2.sectionHeader {
+      font-size: 40px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      margin-right: 50px;
+      margin-left: 50px;
+    }
+
+    h3 {
+      margin: 0;
+      padding: 0;
+    }
+
+    .description {
+      font-size: 15px;
+    }
+
+    .iconLinks {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .icon {
+      padding-right: 5px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+
+    nav ul li a {
+      text-transform: uppercase;
+      font-size: smaller;
+      font-weight: bold;
+    }
+
+    /* Style the introduction section */
+
+    .introduction {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .introWithPhoto {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      margin-right: 15%;
+      margin-top: 8%;
+    }
+
+    /* Style the interests sections */
+    .parallax {
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding-bottom: 100px;
+      height: 100%;
+      width: 100%;
+    }
+
+    .sectionHead {
+      width: 100%;
+      background-color: rgba(193, 193, 193, 0.65);
+    }
+
+    .interests {
+      top: 50%;
+    }
+
+    .interest {
+      position: relative;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      padding-right: 20px;
+      padding-left: 20px;
+      background-color: rgba(193, 193, 193, 0.85);
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .interest.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .content-bottom-padding {
+      height: 100vh;
+      /* add some extra padding to the bottom of the content div */
+    }
+  </style>
 </head>
 
 <body>
-  <div class="header">
-    <a class="name" href="index.html">
-      <p class="name">Megan Tormey</p>
-    </a>
-
-    <nav class="mainnav">
-      <ul>
-        <li><a href="index.html">About Me</a></li>
-        <li><a href="projects.html">Projects</a></li>
-      </ul>
-    </nav>
-  </div>
-
-  <div class='about_me'>
-    <div class='about'>
-      <h2>About Me</h2>
-      <p class="interest">My name is Megan Tormey. I am from the greater Boston area in Massachusetts. Currently, I am
-        senior at Cornell University in the College of Engineering. I am majoring in Information Science, Systems and
-        Technology with concentrations in both Data Science and User
-        Experience. Additionally, I am pursuing a minor in Business.
-      </p>
-    </div>
-
-    <div class="my_face_container">
-      <img class="my_face" src="images/headshot.png" />
-    </div>
-
-  </div>
-
-  <div class="see_more">
-    <div class="one">
-      <p><a href="projects.html">Check out</a> some projects I have worked on!</p>
-    </div>
-    <div class="one">
-      <p>Keep scrolling to get to know more about my interests and hobbies!</p>
-    </div>
-  </div>
-
-  <div class="interests">
-    <div class="int-header">
-      <h2>Interests and Hobbies</h2>
-    </div>
-    <div class="my-interests">
-      <div class="int">
-        <div class="explain">
-          <h3>Hiking</h3>
-          <p class="desc">I spent the summers of 2019 and 2020 working for the Appalachian Mountain Club in two of their
-            high mountain huts (Greenleaf and Mizpah). My favorite activity in the summer is heading to the White
-            Mountains to camp and explore the trails with my family and friends!</p>
-        </div>
-        <img class="hobby" src="images/hiking.png" />
+  <div class="startscreen">
+    <div class="header">
+      <div class="logo">
+        <a href="/"><img src="images/meganLogo.svg" height="50px" width="auto" /></a>
       </div>
-      <div class="int">
-        <img class="hobby" src="images/podcast.png" />
-        <div class="explain">
-          <h3>Podcasts</h3>
-          <p class="desc">I enjoy listening to podcasts while walking and driving! They are an entertaining
-            and informative way to pass time. If you are looking for a podcast recommendation, I would highly recommend
-            Armchair Expert.
-          </p>
-        </div>
-      </div>
-      <div class="int">
-        <div class="explain">
-          <h3>Oatmeal</h3>
-          <p class="desc">Fun fact: I have eaten a bowl of oatmeal for breakfast practically every day for the last two
-            years. It is so cozy and delicious, and it is so fun to try out different flavors and recipes!</p>
-        </div>
-        <img class="hobby" src="images/oatmeal.png" />
+      <div class="navigationBar">
+        <nav>
+          <ul>
+            <li><a href="index.html">About</a></li>
+            <li><a href="projects.html">Works</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
 
+    <div class="introWithPhoto" id="intro">
+      <svg width="500" height="450">
+        <defs>
+          <clipPath id="circleView">
+            <circle cx="210" cy="225" r="200" fill="#FFFFFF" />
+          </clipPath>
+        </defs>
+        <circle cx="255" cy="225" r="200" fill="rgb(187, 208, 225)" />
+        <circle cx="240" cy="225" r="200" fill="rgb(146, 176, 200)" />
+        <circle cx="225" cy="225" r="200" fill="rgb(100, 138, 168)" />
+        <image width="450" height="450" xlink:href="images/headshot.png" clip-path="url(#circleView)" />
+      </svg>
+      <div class="introduction">
+        <h3>HELLO, MY NAME IS</h3>
+        <h1>MEGAN TORMEY</h1>
+        <p class="description">I'm a UX designer and front-end web developer.</p>
+        <div class="iconLinks">
+          <a src="" target="_blank"><img src="images/resumeIcon.svg" height="35px" width="auto" class="icon" /></a>
+          <a href="https://www.linkedin.com/in/megan-tormey" target="_blank"><img src="images/linkedinIcon.svg"
+              height="30px" width="auto" class="icon" /></a>
+          <a href="https://github.com" target="_blank"><img src="images/githubIcon.svg" height="35px" width="auto"
+              class="icon" /></a>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <div class="parallax"
+    style="background-image: linear-gradient(0deg, #00004227, #00004227), url('images/background.jpeg');">
+
+    <div class="sectionHead">
+      <h2 class="sectionHeader">Interests and Hobbies</h2>
+    </div>
+
+    <div class="interests">
+      <div class="interest" id="interest-1">
+        <h2>Hiking</h2>
+        <p class="description">I spent the summers of 2019 and 2020 working for the Appalachian Mountain Club in two of
+          their high mountain
+          huts (Greenleaf and Mizpah). My favorite activity in the summer is heading to the White Mountains to camp and
+          explore the trails with my family and friends!</p>
+      </div>
+      <div class="interest" id="interest-2">
+        <h2>Climbing</h2>
+        <p class="description">I recently joined a local rock climbing gym and I have been enjoying heading into the gym
+          with some friends.
+          Rock climbing is proving to be a challenge both physically and mentally.</p>
+      </div>
+      <div class="interest" id="interest-3">
+        <h2>Podcasts</h2>
+        <p class="description">I enjoy listening to podcasts while walking and driving! They are an entertaining and
+          informative way to pass
+          time. If you are looking for a podcast recommendation, I would highly recommend Armchair Expert.</p>
+      </div>
+    </div>
+
+    <div class="content-bottom-padding"></div>
+
+  </div>
+
+  <script>
+    function appear() {
+      const interests = document.querySelectorAll('.interest');
+      const observer = new IntersectionObserver(entries => {
+        console.log(entries)
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            observer.unobserve(entry.target);
+          } else {
+            entry.target.classList.remove('show');
+          }
+        });
+      }, { rootMargin: "-30% 0px -30% 0px" });
+
+      interests.forEach(interest => {
+        console.log(observer.observe(interest));
+        observer.observe(interest);
+      });
+    }
+
+
+    // Add parallax scrolling effect to the interest sections
+    function parallax() {
+      var scrollPosition = window.pageYOffset;
+
+      // Get all the parallax sections
+      var parallaxSections = document.getElementsByClassName('parallax');
+
+      // Loop through each section and set its background position based on the scroll position
+      for (var i = 0; i < parallaxSections.length; i++) {
+        var sectionOffsetTop = parallaxSections[i].offsetTop;
+        var sectionHeight = parallaxSections[i].clientHeight;
+        var sectionBackgroundPosition = '50% ' + ((sectionOffsetTop - scrollPosition) * 0.5) + 'px';
+        parallaxSections[i].style.backgroundPosition = sectionBackgroundPosition;
+      }
+    }
+
+    // Call the parallax function on scroll
+    window.addEventListener('scroll', function () {
+      parallax();
+      appear();
+    });
+  </script>
 </body>
 
 </html>
